@@ -14,6 +14,12 @@
     <Filter Include="KamataEngine\Adapter">
       <UniqueIdentifier>{c6468eb4-788b-4a83-b207-a5f4804e56c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KamataEngine\ソース">
+      <UniqueIdentifier>{06c6e6af-49ed-4cee-8d2f-5a14b3709578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KamataEngine\ヘッダー">
+      <UniqueIdentifier>{30d3c23e-366f-4fd6-878a-3aa455f3d552}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\DirectXCommon.cpp">
@@ -28,7 +34,6 @@
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\WinApp.cpp">
       <Filter>KamataEngine\Source</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
@@ -37,6 +42,24 @@
     </ClCompile>
     <ClCompile Include="C:\KamataEngine\DirectXGame\base\StringUtility.cpp">
       <Filter>KamataEngine\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="MayhUtilityO.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="Player2.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene2D.cpp">
+      <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +133,21 @@
     <ClInclude Include="C:\KamataEngine\DirectXGame\2d\ImGuiManager.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h">
       <Filter>KamataEngine\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="MayhUtilityO.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="Player2.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene2D.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
