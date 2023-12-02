@@ -26,7 +26,8 @@ public:
 	/// <param name="hpMax">最大HP</param>
 	/// <param name="power">攻撃力</param>
 	/// <param name="speed">速度</param>
-	void Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed);
+	/// <param name="direction">自機の向き。0 = 右, 1 = 左</param>
+	void Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed, int32_t direction);
 
 	/// <summary>
 	/// 更新処理
@@ -69,7 +70,9 @@ public:
 	/// <summary>
 	/// UI描画
 	/// </summary>
-	void DrawUI();
+	/// <param name="hpGagePos">HPゲージの位置</param>
+	/// <param name="hpGageSubDirection">HPゲージを減らしていく方向</param>
+	void DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection);
 
 	// ゲッター
 	Vector2 GetPosition() { return _pos; }

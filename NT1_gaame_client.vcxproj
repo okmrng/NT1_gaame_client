@@ -120,7 +120,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MayhUtilityO.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Player2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -154,7 +153,6 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="GameScene2D.h" />
     <ClInclude Include="MayhUtilityO.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Player2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

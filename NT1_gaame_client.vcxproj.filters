@@ -55,9 +55,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
-    <ClCompile Include="Player2.cpp">
-      <Filter>KamataEngine\ソース</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene2D.cpp">
       <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
@@ -141,9 +138,6 @@
       <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>KamataEngine\ヘッダー</Filter>
-    </ClInclude>
-    <ClInclude Include="Player2.h">
       <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="GameScene2D.h">

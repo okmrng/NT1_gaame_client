@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Player.h>
-#include <Player2.h>
 #include <Novice.h>
 
 /// <summary>
@@ -43,7 +42,7 @@ public:
 
 private:
 	//! 自機
-	Player* _player = nullptr; // 1P
-	Player2* _player2 = nullptr; // 2P
+	Player* _player1 = nullptr; // 1P
+	Player* _player2 = nullptr; // 2P
 };
 

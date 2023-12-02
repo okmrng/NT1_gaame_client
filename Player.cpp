@@ -5,7 +5,7 @@ Player::~Player()
 	for (Bullet* bullet : _bullets) delete bullet;
 }
 
-void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed)
+void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed, int32_t direction)
 {
 	_pos = pos;
 	_rad = rad;
@@ -16,7 +16,8 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Ve
 	_speed = speed;
 	_bulletCoolTimerParameter = 60;
 	_bulletCoolTimer = _bulletCoolTimerParameter;
-	_direction = Direction::RIGHT;
+	if (direction == 0) _direction = Direction::RIGHT;
+	if (direction == 1) _direction = Direction::LEFT;
 	_isDead = false;
 }
 
@@ -130,16 +131,16 @@ void Player::Draw()
 
 	//? デバッグ文字
 #ifdef _DEBUG
-	Novice::ScreenPrintf(0, 0, "bulletCollTimer:%d", _bulletCoolTimer);
+	/*Novice::ScreenPrintf(0, 0, "bulletCollTimer:%d", _bulletCoolTimer);
 	Novice::ScreenPrintf(0, 40, "1P:%d", _hp);
 	if (_isDead) Novice::ScreenPrintf(0, 60, "dead");
-	else Novice::ScreenPrintf(0, 60, "life");
+	else Novice::ScreenPrintf(0, 60, "life");*/
 #endif
 }
 
-void Player::DrawUI()
+void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 {
-	//! UI
 	//! HPゲージ
-	Novice::DrawBox(20, 20, 256 * _hp / _hpMax, 40, 0.0f, GREEN, kFillModeSolid);
+	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
+		0.0f, GREEN, kFillModeSolid);
 }
