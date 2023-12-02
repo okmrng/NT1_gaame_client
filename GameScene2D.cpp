@@ -27,7 +27,7 @@ void GameScene2D::Update(char* keys)
 {
 	if (!_player->GetIsDead() && !_player2->GetIsDead()) {
 		//! 自機
-		_player->Update(keys);  // 1P
+		//_player->Update(keys);  // 1P
 		_player2->Update(keys); // 2P
 
 		//! 当たり判定

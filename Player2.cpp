@@ -48,19 +48,34 @@ void Player2::Move(char* keys)
 {
 	// キー入力がされたら移動
 	// 右
-	if (keys[DIK_RIGHT]) {
+	if (keys[DIK_D] || keys[DIK_RIGHT]) {
 		_pos.x += _speed.x;
 		// 向きを変える
 		_direction = Direction::RIGHT;
 	}
 	// 左
-	if (keys[DIK_LEFT]) {
+	if (keys[DIK_A] || keys[DIK_LEFT]) {
 		_pos.x -= _speed.x;
 		// 向きを変える
 		_direction = Direction::LEFT;
 	}
-	if (keys[DIK_DOWN]) _pos.y += _speed.y; // 下	
-	if (keys[DIK_UP]) _pos.y -= _speed.y;   // 上
+	if (keys[DIK_S] || keys[DIK_DOWN]) _pos.y += _speed.y; // 下	
+	if (keys[DIK_W] || keys[DIK_UP]) _pos.y -= _speed.y;   // 上
+
+	// 右
+	//if (keys[DIK_D]) {
+	//	_pos.x += _speed.x;
+	//	// 向きを変える
+	//	_direction = Direction::RIGHT;
+	//}
+	//// 左
+	//if (keys[DIK_A]) {
+	//	_pos.x -= _speed.x;
+	//	// 向きを変える
+	//	_direction = Direction::LEFT;
+	//}
+	//if (keys[DIK_S]) _pos.y += _speed.y; // 下	
+	//if (keys[DIK_W]) _pos.y -= _speed.y; // 上
 
 	// 移動制限
 	if (_pos.x >= 1280 - _rad) _pos.x = 1280 - _rad; // 右端
