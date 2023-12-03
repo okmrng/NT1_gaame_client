@@ -2,6 +2,8 @@
 
 #include <Player.h>
 #include <Novice.h>
+#include <process.h>
+#include <mmsystem.h>
 
 /// <summary>
 /// ゲームシーンクラス
@@ -9,11 +11,6 @@
 class GameScene2D
 {
 public:
-	/// <summary>
-	/// コンストラクタ
-	/// </summary>
-	GameScene2D();
-
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -41,8 +38,5 @@ public:
 	void Draw();
 
 private:
-	//! 自機
-	Player* _player1 = nullptr; // 1P
-	Player* _player2 = nullptr; // 2P
 };
 

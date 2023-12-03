@@ -14,8 +14,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	char preKeys[256] = {0};
 
 	//! ゲームシーン
-	GameScene2D* gameScene = new GameScene2D();
-	gameScene->Initialize();
+	GameScene2D* gameScene2D = new GameScene2D();
+	gameScene2D->Initialize();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		//! ゲームシーン
-		gameScene->Update(keys);
+		gameScene2D->Update(keys);
 
 		///
 		/// ↑更新処理ここまで
@@ -42,7 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
 		//! ゲームシーン
-		gameScene->Draw();
+		gameScene2D->Draw();
 
 		///
 		/// ↑描画処理ここまで

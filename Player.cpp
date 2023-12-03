@@ -2,17 +2,17 @@
 
 Player::~Player()
 {
-	for (Bullet* bullet : _bullets) delete bullet;
+	//for (Bullet* bullet : _bullets) delete bullet;
 }
 
-void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed, int32_t direction)
+void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed, int32_t direction)
 {
 	_pos = pos;
 	_rad = rad;
 	_hpMax = hpMax;
 	_hp = _hpMax;
 	_power = power;
-	_sprite = BLUE;
+	_sprite = sprite;
 	_speed = speed;
 	_bulletCoolTimerParameter = 60;
 	_bulletCoolTimer = _bulletCoolTimerParameter;
@@ -31,19 +31,19 @@ void Player::Update(char* keys)
 
 	//! 弾
 	// 弾の生成
-	Attack();
+	//Attack();
 
 	// 弾更新
-	for (Bullet* bullet : _bullets) bullet->Update();
+	//for (Bullet* bullet : _bullets) bullet->Update();
 
 	// 弾の削除
-	_bullets.remove_if([](Bullet* bullet) {
+	/*_bullets.remove_if([](Bullet* bullet) {
 		if (bullet->GetIsDead()) {
 			delete bullet;
 			return true;
 		}
 		return false;
-		});
+		});*/
 }
 
 void Player::Move(char* keys)
@@ -88,21 +88,21 @@ void Player::Move(char* keys)
 
 void Player::Attack()
 {
-	if (_bulletCoolTimer == _bulletCoolTimerParameter) {
-		// 弾の速度
-		Vector2 bulletSpeed = Vector2(7, 0);
-		// 自機の向きに応じて弾の発射方向を変化させる
-		if (_direction == Direction::RIGHT) bulletSpeed = Vector2(7, 0); // 右
-		if (_direction == Direction::LEFT) bulletSpeed = Vector2(-7, 0); // 左
+	//if (_bulletCoolTimer == _bulletCoolTimerParameter) {
+	//	// 弾の速度
+	//	Vector2 bulletSpeed = Vector2(7, 0);
+	//	// 自機の向きに応じて弾の発射方向を変化させる
+	//	if (_direction == Direction::RIGHT) bulletSpeed = Vector2(7, 0); // 右
+	//	if (_direction == Direction::LEFT) bulletSpeed = Vector2(-7, 0); // 左
 
-		// 弾を生成
-		Bullet* newBullet = new Bullet();
-		newBullet->Initialize(_pos, bulletSpeed, _power, RED);
-		_bullets.push_back(newBullet);
-	}
-	// 弾のクールタイム
-	if (_bulletCoolTimer <= _bulletCoolTimerParameter) _bulletCoolTimer--;
-	if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
+	//	// 弾を生成
+	//	Bullet* newBullet = new Bullet();
+	//	newBullet->Initialize(_pos, bulletSpeed, _power, RED);
+	//	_bullets.push_back(newBullet);
+	//}
+	//// 弾のクールタイム
+	//if (_bulletCoolTimer <= _bulletCoolTimerParameter) _bulletCoolTimer--;
+	//if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
 }
 
 void Player::Dead()
@@ -124,17 +124,17 @@ void Player::PlayerCollision()
 void Player::Draw()
 {
 	//! 弾
-	for (Bullet* bullet : _bullets) bullet->Draw();
+	//for (Bullet* bullet : _bullets) bullet->Draw();
 
 	//! 自機
 	Novice::DrawEllipse(int(_pos.x), int(_pos.y), int(_rad), int(_rad), 0.0f, _sprite, kFillModeSolid);
 
 	//? デバッグ文字
 #ifdef _DEBUG
-	/*Novice::ScreenPrintf(0, 0, "bulletCollTimer:%d", _bulletCoolTimer);
-	Novice::ScreenPrintf(0, 40, "1P:%d", _hp);
-	if (_isDead) Novice::ScreenPrintf(0, 60, "dead");
-	else Novice::ScreenPrintf(0, 60, "life");*/
+	//Novice::ScreenPrintf(0, 0, "bulletCollTimer:%d", _bulletCoolTimer);
+	//Novice::ScreenPrintf(0, 40, "1P:%d", _hp);
+	//if (_isDead) Novice::ScreenPrintf(0, 60, "dead");
+	//else Novice::ScreenPrintf(0, 60, "life");
 #endif
 }
 
@@ -143,4 +143,16 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 	//! HPゲージ
 	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
 		0.0f, GREEN, kFillModeSolid);
+}
+
+void Player::Serialize(char* buffer) const
+{
+	// メモリコピー
+	memcpy(buffer, this, sizeof(Player));
+}
+
+void Player::Dserialize(const char* buffer)
+{
+	// メモリコピー
+	memcpy(this, buffer, sizeof(Player));
 }

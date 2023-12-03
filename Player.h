@@ -25,9 +25,10 @@ public:
 	/// <param name="rad">半径</param>
 	/// <param name="hpMax">最大HP</param>
 	/// <param name="power">攻撃力</param>
+	/// <param name="sprite">スプライト</param>
 	/// <param name="speed">速度</param>
 	/// <param name="direction">自機の向き。0 = 右, 1 = 左</param>
-	void Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, Vector2 speed, int32_t direction);
+	void Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed, int32_t direction);
 
 	/// <summary>
 	/// 更新処理
@@ -77,8 +78,20 @@ public:
 	// ゲッター
 	Vector2 GetPosition() { return _pos; }
 	float GetRadius() { return _rad; }
-	const std::list<Bullet*>& GetBullet() { return _bullets; }
+	//const std::list<Bullet*>& GetBullet() { return _bullets; }
 	bool GetIsDead() { return _isDead; }
+
+	/// <summary>
+	/// バイト列に変換
+	/// </summary>
+	/// <param name="buffer">送信するバッファ</param>
+	void Serialize(char* buffer)const;
+
+	/// <summary>
+	/// バイト列から復元
+	/// </summary>
+	/// <param name="buffer">受信したバッファ</param>
+	void Dserialize(const char* buffer);
 
 private:
 	// メンバ変数
@@ -102,6 +115,6 @@ private:
 	bool _isDead;         // 死亡フラグ
 
 	//! 弾
-	std::list<Bullet*> _bullets; // 弾のリスト
+	//std::list<Bullet*> _bullets; // 弾のリスト
 };
 
