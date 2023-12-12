@@ -24,7 +24,7 @@ public:
 	/// <param name="speed">速度</param>
 	/// <param name="direction">自機の向き。0 = 右, 1 = 左</param>
 	/// <param name="bulletTexture">弾のテクスチャ</param>
-	void Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed,
+	void Initialize(Vector2 pos, float rad, float hp, float hpMax, float power, uint32_t sprite, Vector2 speed,
 		int32_t direction, uint32_t bulletTexture);
 
 	/// <summary>
@@ -58,12 +58,32 @@ public:
 	/// 弾が当たった時の関数
 	/// </summary>
 	/// <param name="power">ダメージ</param>
-	void OnCollision(int32_t damage);
+	void OnCollision(float damage);
 
 	/// <summary>
-	/// 弾の当たった時の処理
+	/// 攻撃アップアイテムと当たった時の処理
 	/// </summary>
-	void OnCollisionBullet();
+	void OnCollisionAttack();
+
+	/// <summary>
+	/// 弾速アップアイテムと当たった時の処理
+	/// </summary>
+	void OnCollisionSpeed();
+
+	/// <summary>
+	/// 最大HPアップアイテムと当たった時の処理
+	/// </summary>
+	void OnCollisionMaxHp();
+
+	/// <summary>
+	/// 回復アイテムと当たった時の処理
+	/// </summary>
+	void OnCollisionHeal();
+
+	/// <summary>
+	/// 弾強化アイテムと当たった時の処理
+	/// </summary>
+	void OnCollisionStrong();
 
 	/// <summary>
 	/// 自機同士が当たった時の関数
@@ -85,15 +105,15 @@ public:
 	// ゲッター
 	Vector2 GetPosition() { return _pos; }
 	float GetRadius() { return _rad; }
-	int32_t GetPower() { return _power; }
-	int32_t GetHP() { return _hp; }
-	//const std::list<Bullet*>& GetBullet() { return _bullets; }
+	float GetPower() { return _power; }
+	float GetHP() { return _hp; }
+	float GetHPM() { return _hpMax; }
 	float GetBulletRadius() { return _bulletRad; }
 	Vector2 GetBulletPosition() { return*_bulletPos; }
 	bool GetIsDead() { return _isDead; }
 	bool GetIsHit() { return _isHit; }
-	int GetHitTime() { return _hitTime; }
 	bool GetCanPlay() { return _canPlay; }
+	bool GetAddBullet() { return _addBullet; }
 
 	// セッター
 	void SetCanPlay(bool canPlay);
@@ -110,15 +130,15 @@ public:
 	/// <param name="buffer">受信したバッファ</param>
 	void Dserialize(const char* buffer);
 
-	int32_t	 _hp;             // HP
-	Vector2 _bulletPos[5];    // 弾の位置
+	float	 _hp;             // HP
+	Vector2 _bulletPos[15];    // 弾の位置
 private:
 	// メンバ変数
 	//! 自機
 	Vector2	 _pos;	                    // 位置
 	float	 _rad;	                    // 半径
-	int32_t	 _hpMax;                    // 最大HP
-	int32_t	 _power;                    // 攻撃力
+	float	 _hpMax;                    // 最大HP
+	float	 _power;                    // 攻撃力
 	uint32_t _sprite;                   // 色
 	Vector2  _speed;                    // 速度
 	int32_t  _bulletCoolTimerParameter; // 弾のクールタイムの値
@@ -130,17 +150,18 @@ private:
 		LEFT   // 左
 	};
 	Direction _direction; // 向き
-	bool _isDead;         // 死亡フラグ
-	bool _isHit;          // ヒットフラグ
-	int _hitTime;         // 無敵時
-	bool _canPlay;        // プレイフラグ
+	bool _isDead;          // 死亡フラグ
+	bool _isHit;             // ヒットフラグ
+	int _hitTime;           // 無敵時
+	bool _canPlay;       // プレイフラグ
 
 	//! 弾
-	//std::list<Bullet*> _bullets; // 弾のリスト
-	int32_t _bulletLength = 1; // 現在の弾数
-	Vector2 _bulletSpeed[5];  // 弾速
-	bool _bulletMove[5];      // 弾の移動フラグ
+	Vector2 _bulletSpeed[3]; // 弾速
+	bool _bulletMove[15];     // 弾の移動フラグ
 	uint32_t _bulletSprite;    // 弾のスプライト
-	float _bulletRad;          // 弾の半径
+	float _bulletRad;           // 弾の半径
+	bool _bulletSpeedUp;    // 弾速度アップフラグ
+	bool _bulletCoolSub;     // 弾のクールタイム低下フラグ
+	bool _addBullet;           // 弾増加フラグ
 };
 

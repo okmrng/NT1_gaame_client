@@ -1,6 +1,6 @@
 #include "Player.h"
 
-void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed,
+void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float power, uint32_t sprite, Vector2 speed,
 	int32_t direction, uint32_t bulletTexture)
 {
 	//! 自機
@@ -21,16 +21,16 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32
 	_canPlay = false;
 
 	//! 弾
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 15; i++) {
 		_bulletPos[i] = Vector2(1500, 1500);
-		_bulletSpeed[i].x = 7;
-		_bulletSpeed[i].y = 0;
 		_bulletMove[i] = false;
 	}
-	//_bulletSpeed[0].x = 7;
-	//_bulletSpeed[0].y = 0;
+	_bulletSpeed[0] = Vector2(7, 0);
+	_bulletSpeed[1] = Vector2(7, 1.5f);
+	_bulletSpeed[2] = Vector2(7, -1.5f);
 	_bulletSprite = bulletTexture;
 	_bulletRad = 10;
+	_addBullet = false;
 }
 
 void Player::Update(char* keys)
@@ -44,6 +44,9 @@ void Player::Update(char* keys)
 		_hitTime--;
 		if (_hitTime <= 0) _isHit = false;
 	}
+
+	// 最大体力を越さない
+	if (_hp > _hpMax) _hp = _hpMax;
 
 	// 死亡
 	Dead();
@@ -113,6 +116,7 @@ void Player::Attack()
 
 void Player::BulletUpdate()
 {
+	// 弾をセット
 	--_bulletCoolTimer;
 	if (_bulletCoolTimer < 0) _bulletCoolTimer = _bulletCoolTimerParameter;
 	if (_bulletCoolTimer == 0) {
@@ -123,10 +127,39 @@ void Player::BulletUpdate()
 				break;
 			}
 		}
+		for (int i = 5; i < 10; i++) {
+			if (!_bulletMove[i]) {
+				_bulletPos[i] = _pos;
+				_bulletMove[i] = true;
+				break;
+			}
+		}
+		for (int i = 10; i < 15; i++) {
+			if (!_bulletMove[i]) {
+				_bulletPos[i] = _pos;
+				_bulletMove[i] = true;
+				break;
+			}
+		}
 	}
+	// 弾の移動
 	for (int i = 0; i < 5; i++) {
 		if (_bulletMove[i]) {
-			_bulletPos[i] += _bulletSpeed[i];
+			_bulletPos[i] += _bulletSpeed[0];
+			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
+				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+		}
+	}
+	for (int i = 5; i < 10; i++) {
+		if (_bulletMove[i]) {
+			_bulletPos[i] += _bulletSpeed[1];
+			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
+				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+		}
+	}
+	for (int i = 10; i < 15; i++) {
+		if (_bulletMove[i]) {
+			_bulletPos[i] += _bulletSpeed[2];
 			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
 				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
 		}
@@ -138,7 +171,7 @@ void Player::Dead()
 	if (_hp <= 0) _isDead = true;
 }
 
-void Player::OnCollision(int32_t damage)
+void Player::OnCollision(float damage)
 {
 	if (!_isHit) {
 		_hp -= damage;
@@ -147,9 +180,43 @@ void Player::OnCollision(int32_t damage)
 	}
 }
 
-void Player::OnCollisionBullet()
+void Player::OnCollisionAttack()
 {
+	_power += 2;
+}
 
+void Player::OnCollisionSpeed()
+{
+	_speed += Vector2(0.1f, 0.1f);
+}
+
+void Player::OnCollisionMaxHp()
+{
+	_hpMax += 20;
+}
+
+void Player::OnCollisionHeal()
+{
+	float heal = _hpMax * 0.2f;
+	if (_hp < _hpMax) _hp += heal;
+}
+
+void Player::OnCollisionStrong()
+{
+	//! 弾速アップ
+	if (!_bulletSpeedUp) {
+		for (int i = 0; i < 3; i++) {
+			_bulletSpeed[i] += Vector2(3, 0);
+		}
+		_bulletSpeedUp = true;
+	}
+	//! 弾のクールタイム低下
+	else if (_bulletSpeed && !_bulletCoolSub) {
+		_bulletCoolTimerParameter /= 2;
+		_bulletCoolSub = true;
+	}
+	//! 弾数増加
+	else if (_bulletCoolSub && !_addBullet) { _addBullet = true; }
 }
 
 void Player::PlayerCollision()
@@ -161,10 +228,15 @@ void Player::PlayerCollision()
 void Player::Draw()
 {
 	//! 弾
-	//for (Bullet* bullet : _bullets) bullet->Draw();
 	for (int i = 0; i < 5; i++) {
 		Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
 			0.0f, _bulletSprite, kFillModeSolid);
+	}
+	if (_addBullet) {
+		for (int i = 5; i < 15; i++) {
+			Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
+				0.0f, _bulletSprite, kFillModeSolid);
+		}
 	}
 
 	//! 自機
@@ -184,8 +256,9 @@ void Player::Draw()
 void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 {
 	//! HPゲージ
-	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
+	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), (int)256 * ((int)hpGageSubDirection * (int)_hp) / (int)_hpMax, 40,
 		0.0f, GREEN, kFillModeSolid);
+	Novice::DrawBox(int(hpGagePos.x + 256), int(hpGagePos.y), 1200, 40, 0.0f, BLACK, kFillModeSolid);
 }
 
 void Player::SetCanPlay(bool canPlay)
