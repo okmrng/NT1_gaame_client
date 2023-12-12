@@ -11,6 +11,9 @@ HWND hwMain;
 Player* player1 = nullptr; // 1P
 Player* player2 = nullptr; // 2P
 
+//! アイテム
+Item* item = nullptr;
+
 GameScene2D::~GameScene2D()
 {
 	//! 自機
@@ -37,6 +40,10 @@ void GameScene2D::Initialize()
 	player2 = new Player();
 	player2->Initialize(Vector2{ 1230.0f, 360.0f }, 20.0f, 100, 100, 5, GREEN, Vector2(5, 5), 1, RED);
 
+	//! アイテム
+	item = new Item();
+	item->Initialize();
+
 	//! 通信
 	// winsock初期化
 	WSAStartup(MAKEWORD(2, 0), &wdData);
@@ -48,13 +55,15 @@ void GameScene2D::Initialize()
 void GameScene2D::Update(char* keys)
 {
 	if (player1 && player2) {
-		if (!player1->GetIsDead() && !player2->GetIsDead()) {
-			//! 自機
-			//player1->Update(keys);  // 1P
-			player2->Update(keys); // 2P
+		if (player1->GetCanPlay() && player2->GetCanPlay()) {
+			if (!player1->GetIsDead() && !player2->GetIsDead()) {
+				//! 自機
+				//player1->Update(keys);  // 1P
+				player2->Update(keys); // 2P
 
-			//! 当たり判定
-			CheckAllColision();
+				//! 当たり判定
+				CheckAllColision();
+			}
 		}
 	}
 }
@@ -133,6 +142,9 @@ void GameScene2D::Draw()
 	//! UI
 	player1->DrawUI(Vector2(20, 20), 1);     //1P
 	player2->DrawUI(Vector2(1260, 660), -1); //2P
+
+	//!  アイテム
+	item->Draw();
 }
 // 通信スレッド関数
 DWORD WINAPI Threadfunc(void*) {
@@ -181,6 +193,8 @@ DWORD WINAPI Threadfunc(void*) {
 
 	while (1)
 	{
+		player2->SetCanPlay(true);
+
 		// データ送信
 		char sendBuffer[sizeof(Player)];
 		player2->Serialize(sendBuffer);
@@ -192,6 +206,14 @@ DWORD WINAPI Threadfunc(void*) {
 		player1->Dserialize(recvBuffer);
 
 		if (nRcv == SOCKET_ERROR)break;
+
+		//!  アイテム
+		// データ受信
+		char recvItem[sizeof(Item)];
+		int itemRcv = recv(sConnect, (char*)&recvItem, sizeof(Player), 0);
+		item->Dserialize(recvItem);
+
+		if (itemRcv == SOCKET_ERROR)break;
 	}
 
 	shutdown(sConnect, 2);

@@ -93,6 +93,10 @@ public:
 	bool GetIsDead() { return _isDead; }
 	bool GetIsHit() { return _isHit; }
 	int GetHitTime() { return _hitTime; }
+	bool GetCanPlay() { return _canPlay; }
+
+	// セッター
+	void SetCanPlay(bool canPlay);
 
 	/// <summary>
 	/// バイト列に変換
@@ -128,7 +132,8 @@ private:
 	Direction _direction; // 向き
 	bool _isDead;         // 死亡フラグ
 	bool _isHit;          // ヒットフラグ
-	int _hitTime;         // 無敵時間
+	int _hitTime;         // 無敵時
+	bool _canPlay;        // プレイフラグ
 
 	//! 弾
 	//std::list<Bullet*> _bullets; // 弾のリスト

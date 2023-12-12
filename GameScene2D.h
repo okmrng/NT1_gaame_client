@@ -4,6 +4,7 @@
 #include <Novice.h>
 #include <process.h>
 #include <mmsystem.h>
+#include <Item.h>
 
 /// <summary>
 /// ゲームシーンクラス

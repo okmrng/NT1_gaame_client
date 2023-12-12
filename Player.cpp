@@ -18,6 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
+	_canPlay = false;
 
 	//! 弾
 	for (int i = 0; i < 5; i++) {
@@ -185,6 +186,11 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 	//! HPゲージ
 	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
 		0.0f, GREEN, kFillModeSolid);
+}
+
+void Player::SetCanPlay(bool canPlay)
+{
+	_canPlay = canPlay;
 }
 
 void Player::Serialize(char* buffer) const

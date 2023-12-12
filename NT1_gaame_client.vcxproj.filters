@@ -55,6 +55,9 @@
     <ClCompile Include="GameScene2D.cpp">
       <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>KamataEngine\ソース</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -135,6 +138,9 @@
       <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
     <ClInclude Include="GameScene2D.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
       <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
   </ItemGroup>
