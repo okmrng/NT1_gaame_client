@@ -63,9 +63,6 @@ void GameScene2D::CheckAllColision()
 {
 	Vector2 posA, posB; // 当たり判定用の変数
 
-	//const std::list<Bullet*>& p1Bullets = player1->GetBullet(); // 1Pの弾
-	//const std::list<Bullet*>& p2Bullets = player2->GetBullet(); // 2Pの弾
-
 	//! 2Pと1Pの弾の当たり判定
 #pragma region
 	for (int i = 0; i < 5; i++) {
@@ -79,9 +76,7 @@ void GameScene2D::CheckAllColision()
 		// 当たったか判定
 		if (distance <= radius) {
 			// 2Pの弾の当たった時の処理
-			player2->_hp--;
-			// 1Pの弾の当たった時の処理
-			player1->_bulletPos[i] = Vector2(2000, 2000);
+			player2->OnCollision(player1->GetPower());
 		}
 	}
 #pragma endregion
@@ -145,7 +140,7 @@ DWORD WINAPI Threadfunc(void*) {
 	SOCKET sConnect;// 待機用と接続用
 	struct sockaddr_in saLocal, saConnect;// 待機用と接続用
 	WORD wPort = 8000;
-	char szServer[15] = "192.168.32.238";
+	char szServer[15] = "192.168.11.6";
 	HOSTENT* IpHost;
 	unsigned int addr;
 	int iLen;// accept関数で使用

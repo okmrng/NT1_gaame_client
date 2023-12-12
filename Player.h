@@ -45,11 +45,6 @@ public:
 	void Move(char* keys);
 
 	/// <summary>
-	/// 弾の生成
-	/// </summary>
-	void Attack();
-
-	/// <summary>
 	/// 弾の更新
 	/// </summary>
 	void BulletUpdate();
@@ -91,10 +86,14 @@ public:
 	Vector2 GetPosition() { return _pos; }
 	float GetRadius() { return _rad; }
 	int32_t GetPower() { return _power; }
-	//const std::list<Bullet*>& GetBullet() { return _bullets; }
+	int32_t GetHP() { return _hp; }
 	float GetBulletRadius() { return _bulletRad; }
 	Vector2 GetBulletPosition() { return*_bulletPos; }
 	bool GetIsDead() { return _isDead; }
+	bool GetIsHit() { return _isHit; }
+
+	// セッター
+	void SetIsHit(bool isHit);
 
 	/// <summary>
 	/// バイト列に変換
@@ -108,8 +107,7 @@ public:
 	/// <param name="buffer">受信したバッファ</param>
 	void Dserialize(const char* buffer);
 
-	int a = 0;
-	int32_t	 _hp;                       // HP
+	int32_t	 _hp;             // HP
 	Vector2 _bulletPos[5];    // 弾の位置
 private:
 	// メンバ変数
@@ -130,12 +128,12 @@ private:
 	};
 	Direction _direction; // 向き
 	bool _isDead;         // 死亡フラグ
+	bool _isHit;          // ヒットフラグ
 
 	//! 弾
-	//std::list<Bullet*> _bullets; // 弾のリスト
 	int32_t _bulletLength = 1; // 現在の弾数
-	Vector2 _bulletSpeed[5];  // 弾速
-	bool _bulletMove[5];      // 弾の移動フラグ
+	Vector2 _bulletSpeed[5];   // 弾速
+	bool _bulletMove[5];       // 弾の移動フラグ
 	uint32_t _bulletSprite;    // 弾のスプライト
 	float _bulletRad;          // 弾の半径
 };

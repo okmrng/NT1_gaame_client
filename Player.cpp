@@ -21,6 +21,7 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32
 	if (direction == 0) _direction = Direction::RIGHT;
 	if (direction == 1) _direction = Direction::LEFT;
 	_isDead = false;
+	_isHit = false;
 
 	//! 弾
 	for (int i = 0; i < 5; i++) {
@@ -29,8 +30,6 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32
 		_bulletSpeed[i].y = 0;
 		_bulletMove[i] = false;
 	}
-	//_bulletSpeed[0].x = 7;
-	//_bulletSpeed[0].y = 0;
 	_bulletSprite = bulletTexture;
 	_bulletRad = 10;
 }
@@ -101,25 +100,6 @@ void Player::Move(char* keys)
 	if (_pos.y <= _rad + 80) _pos.y = _rad + 80;     // 上端
 }
 
-void Player::Attack()
-{
-	//if (_bulletCoolTimer == _bulletCoolTimerParameter) {
-	//	// 弾の速度
-	//	Vector2 bulletSpeed = Vector2(7, 0);
-	//	// 自機の向きに応じて弾の発射方向を変化させる
-	//	if (_direction == Direction::RIGHT) bulletSpeed = Vector2(7, 0); // 右
-	//	if (_direction == Direction::LEFT) bulletSpeed = Vector2(-7, 0); // 左
-
-	//	// 弾を生成
-	//	Bullet* newBullet = new Bullet();
-	//	newBullet->Initialize(_pos, bulletSpeed, _power, RED);
-	//	_bullets.push_back(newBullet);
-	//}
-	//// 弾のクールタイム
-	//if (_bulletCoolTimer <= _bulletCoolTimerParameter) _bulletCoolTimer--;
-	//if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
-}
-
 void Player::BulletUpdate()
 {
 	--_bulletCoolTimer;
@@ -149,8 +129,8 @@ void Player::Dead()
 
 void Player::OnCollision(int32_t damage)
 {
-	a++;
 	_hp -= damage;
+	_isHit = true;
 }
 
 void Player::OnCollisionBullet()
@@ -168,7 +148,7 @@ void Player::Draw()
 {
 	//! 弾
 	//for (Bullet* bullet : _bullets) bullet->Draw();
-	for (int i = 0; i < 15; i++) {
+	for (int i = 0; i < 5; i++) {
 		Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
 			0.0f, _bulletSprite, kFillModeSolid);
 	}
@@ -192,6 +172,11 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 	//! HPゲージ
 	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
 		0.0f, GREEN, kFillModeSolid);
+}
+
+void Player::SetIsHit(bool isHit)
+{
+	_isHit = isHit;
 }
 
 void Player::Serialize(char* buffer) const
