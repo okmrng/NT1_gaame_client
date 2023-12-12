@@ -1,10 +1,5 @@
 #include "Player.h"
 
-Player::~Player()
-{
-	//for (Bullet* bullet : _bullets) delete bullet;
-}
-
 void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed,
 	int32_t direction, uint32_t bulletTexture)
 {
@@ -22,14 +17,17 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32
 	if (direction == 1) _direction = Direction::LEFT;
 	_isDead = false;
 	_isHit = false;
+	_hitTime = 120;
 
 	//! 弾
 	for (int i = 0; i < 5; i++) {
 		_bulletPos[i] = Vector2(1500, 1500);
-		_bulletSpeed[i].x = 0;
+		_bulletSpeed[i].x = 7;
 		_bulletSpeed[i].y = 0;
 		_bulletMove[i] = false;
 	}
+	//_bulletSpeed[0].x = 7;
+	//_bulletSpeed[0].y = 0;
 	_bulletSprite = bulletTexture;
 	_bulletRad = 10;
 }
@@ -39,25 +37,18 @@ void Player::Update(char* keys)
 	//! 自機
 	// 移動
 	Move(keys);
+
+	// 無敵時間
+	if (_isHit) {
+		_hitTime--;
+		if (_hitTime <= 0) _isHit = false;
+	}
+
 	// 死亡
 	Dead();
 
 	//! 弾
-	// 弾の生成
-	//Attack();
-
-	// 弾更新
-	//for (Bullet* bullet : _bullets) bullet->Update();
 	BulletUpdate();
-
-	// 弾の削除
-	/*_bullets.remove_if([](Bullet* bullet) {
-		if (bullet->GetIsDead()) {
-			delete bullet;
-			return true;
-		}
-		return false;
-	});*/
 }
 
 void Player::Move(char* keys)
@@ -100,6 +91,25 @@ void Player::Move(char* keys)
 	if (_pos.y <= _rad + 80) _pos.y = _rad + 80;     // 上端
 }
 
+void Player::Attack()
+{
+	//if (_bulletCoolTimer == _bulletCoolTimerParameter) {
+	//	// 弾の速度
+	//	Vector2 bulletSpeed = Vector2(7, 0);
+	//	// 自機の向きに応じて弾の発射方向を変化させる
+	//	if (_direction == Direction::RIGHT) bulletSpeed = Vector2(7, 0); // 右
+	//	if (_direction == Direction::LEFT) bulletSpeed = Vector2(-7, 0); // 左
+
+	//	// 弾を生成
+	//	Bullet* newBullet = new Bullet();
+	//	newBullet->Initialize(_pos, bulletSpeed, _power, RED);
+	//	_bullets.push_back(newBullet);
+	//}
+	//// 弾のクールタイム
+	//if (_bulletCoolTimer <= _bulletCoolTimerParameter) _bulletCoolTimer--;
+	//if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
+}
+
 void Player::BulletUpdate()
 {
 	--_bulletCoolTimer;
@@ -129,8 +139,11 @@ void Player::Dead()
 
 void Player::OnCollision(int32_t damage)
 {
-	_hp -= damage;
-	_isHit = true;
+	if (!_isHit) {
+		_hp -= damage;
+		_hitTime = 120;
+		_isHit = true;
+	}
 }
 
 void Player::OnCollisionBullet()
@@ -172,11 +185,6 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 	//! HPゲージ
 	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), 256 * (hpGageSubDirection * _hp) / _hpMax, 40,
 		0.0f, GREEN, kFillModeSolid);
-}
-
-void Player::SetIsHit(bool isHit)
-{
-	_isHit = isHit;
 }
 
 void Player::Serialize(char* buffer) const

@@ -13,11 +13,6 @@ class Player
 {
 public:
 	/// <summary>
-	/// デストラクタ
-	/// </summary>
-	~Player();
-
-	/// <summary>
 	/// 初期化
 	/// </summary>
 	/// <param name="pos">位置</param>
@@ -43,6 +38,11 @@ public:
 	/// </summary>
 	/// <param name="keys">キー1</param>
 	void Move(char* keys);
+
+	/// <summary>
+	/// 弾の生成
+	/// </summary>
+	void Attack();
 
 	/// <summary>
 	/// 弾の更新
@@ -87,13 +87,12 @@ public:
 	float GetRadius() { return _rad; }
 	int32_t GetPower() { return _power; }
 	int32_t GetHP() { return _hp; }
+	//const std::list<Bullet*>& GetBullet() { return _bullets; }
 	float GetBulletRadius() { return _bulletRad; }
 	Vector2 GetBulletPosition() { return*_bulletPos; }
 	bool GetIsDead() { return _isDead; }
 	bool GetIsHit() { return _isHit; }
-
-	// セッター
-	void SetIsHit(bool isHit);
+	int GetHitTime() { return _hitTime; }
 
 	/// <summary>
 	/// バイト列に変換
@@ -129,11 +128,13 @@ private:
 	Direction _direction; // 向き
 	bool _isDead;         // 死亡フラグ
 	bool _isHit;          // ヒットフラグ
+	int _hitTime;         // 無敵時間
 
 	//! 弾
+	//std::list<Bullet*> _bullets; // 弾のリスト
 	int32_t _bulletLength = 1; // 現在の弾数
-	Vector2 _bulletSpeed[5];   // 弾速
-	bool _bulletMove[5];       // 弾の移動フラグ
+	Vector2 _bulletSpeed[5];  // 弾速
+	bool _bulletMove[5];      // 弾の移動フラグ
 	uint32_t _bulletSprite;    // 弾のスプライト
 	float _bulletRad;          // 弾の半径
 };
