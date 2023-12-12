@@ -4,7 +4,6 @@
 #include <Novice.h>
 #include <MayhUtilityO.h>
 #include <stdint.h>
-#include <Bullet.h>
 #include <list>
 
 /// <summary>
@@ -23,12 +22,15 @@ public:
 	/// </summary>
 	/// <param name="pos">位置</param>
 	/// <param name="rad">半径</param>
+	/// <param name="hpMax">HP</param>
 	/// <param name="hpMax">最大HP</param>
 	/// <param name="power">攻撃力</param>
 	/// <param name="sprite">スプライト</param>
 	/// <param name="speed">速度</param>
 	/// <param name="direction">自機の向き。0 = 右, 1 = 左</param>
-	void Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed, int32_t direction);
+	/// <param name="bulletTexture">弾のテクスチャ</param>
+	void Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed,
+		int32_t direction, uint32_t bulletTexture);
 
 	/// <summary>
 	/// 更新処理
@@ -48,6 +50,11 @@ public:
 	void Attack();
 
 	/// <summary>
+	/// 弾の更新
+	/// </summary>
+	void BulletUpdate();
+
+	/// <summary>
 	/// 死亡
 	/// </summary>
 	void Dead();
@@ -57,6 +64,11 @@ public:
 	/// </summary>
 	/// <param name="power">ダメージ</param>
 	void OnCollision(int32_t damage);
+
+	/// <summary>
+	/// 弾の当たった時の処理
+	/// </summary>
+	void OnCollisionBullet();
 
 	/// <summary>
 	/// 自機同士が当たった時の関数
@@ -78,7 +90,10 @@ public:
 	// ゲッター
 	Vector2 GetPosition() { return _pos; }
 	float GetRadius() { return _rad; }
+	int32_t GetPower() { return _power; }
 	//const std::list<Bullet*>& GetBullet() { return _bullets; }
+	float GetBulletRadius() { return _bulletRad; }
+	Vector2 GetBulletPosition() { return*_bulletPos; }
 	bool GetIsDead() { return _isDead; }
 
 	/// <summary>
@@ -93,13 +108,15 @@ public:
 	/// <param name="buffer">受信したバッファ</param>
 	void Dserialize(const char* buffer);
 
+	int a = 0;
+	int32_t	 _hp;                       // HP
+	Vector2 _bulletPos[5];    // 弾の位置
 private:
 	// メンバ変数
 	//! 自機
 	Vector2	 _pos;	                    // 位置
 	float	 _rad;	                    // 半径
 	int32_t	 _hpMax;                    // 最大HP
-	int32_t	 _hp;                       // HP
 	int32_t	 _power;                    // 攻撃力
 	uint32_t _sprite;                   // 色
 	Vector2  _speed;                    // 速度
@@ -116,5 +133,10 @@ private:
 
 	//! 弾
 	//std::list<Bullet*> _bullets; // 弾のリスト
+	int32_t _bulletLength = 1; // 現在の弾数
+	Vector2 _bulletSpeed[5];  // 弾速
+	bool _bulletMove[5];      // 弾の移動フラグ
+	uint32_t _bulletSprite;    // 弾のスプライト
+	float _bulletRad;          // 弾の半径
 };
 

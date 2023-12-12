@@ -31,11 +31,11 @@ void GameScene2D::Initialize()
 	//! 自機
 	// 1P
 	player1 = new Player();
-	player1->Initialize(Vector2{ 50.0f, 360.0f }, 20.0f, 100, 5, BLUE, Vector2(5, 5), 0);
+	player1->Initialize(Vector2{ 50.0f, 360.0f }, 20.0f, 100, 100, 5, BLUE, Vector2(5, 5), 0, RED);
 
 	// 2P
 	player2 = new Player();
-	player2->Initialize(Vector2{ 1230.0f, 360.0f }, 20.0f, 100, 5, GREEN, Vector2(5, 5), 1);
+	player2->Initialize(Vector2{ 1230.0f, 360.0f }, 20.0f, 100, 100, 5, GREEN, Vector2(5, 5), 1, RED);
 
 	//! 通信
 	// winsock初期化
@@ -61,68 +61,68 @@ void GameScene2D::Update(char* keys)
 
 void GameScene2D::CheckAllColision()
 {
-//	Vector2 posA, posB; // 当たり判定用の変数
-//
-//	const std::list<Bullet*>& p1Bullets = player1->GetBullet();  // 1Pの弾
-//	const std::list<Bullet*>& p2Bullets = player2->GetBullet(); // 2Pの弾
-//
-//	//! 2Pと1Pの弾の当たり判定
-//#pragma region
-//	for (Bullet* bullet : p1Bullets) {
-//		posA = player2->GetPosition(); // 2Pの位置
-//		posB = bullet->GetPosition();   // 1Pの弾の位置
-//
-//		// AとBの距離を求める
-//		const float distance = CollisionDistance(posB, posA);
-//		const float radius = CollisionRadius(player2->GetRadius(), bullet->GetRadius());
-//
-//		// 当たったか判定
-//		if (distance <= radius) {
-//			// 1Pの弾の当たった時の処理
-//			bullet->OnCollision();
-//			// 2Pの弾の当たった時の処理
-//			player2->OnCollision(bullet->GetPower());
-//		}
-//	}
-//#pragma endregion
-//
-//	//! 1Pと2Pの弾の当たり判定
-//#pragma region
-//	for (Bullet* bullet : p2Bullets) {
-//		posA = player1->GetPosition(); // 1Pの位置
-//		posB = bullet->GetPosition();  // 2Pの弾の位置
-//
-//		// AとBの距離を求める
-//		const float distance = CollisionDistance(posB, posA);
-//		const float radius = CollisionRadius(player1->GetRadius(), bullet->GetRadius());
-//
-//		// 当たったか判定
-//		if (distance <= radius) {
-//			// 2Pの弾の当たった時の処理
-//			bullet->OnCollision();
-//			// 1Pの弾の当たった時の処理
-//			player1->OnCollision(bullet->GetPower());
-//		}
-//	}
-//#pragma endregion
-//
-//	//! 1Pと2Pの当たり判定
-//#pragma region
-//	posA = player1->GetPosition();  // 1Pの位置
-//	posB = player2->GetPosition(); // 2Pの弾の位置
-//
-//	// AとBの距離を求める
-//	const float distance = CollisionDistance(posB, posA);
-//	const float radius = CollisionRadius(player1->GetRadius(), player2->GetRadius());
-//
-//	// 当たったか判定
-//	if (distance <= radius) {
-//		// 1Pの当たった時の処理
-//		player1->PlayerCollision();
-//		// 2Pの当たった時の処理
-//		player2->PlayerCollision();
-//	}
-//#pragma endregion
+	Vector2 posA, posB; // 当たり判定用の変数
+
+	//const std::list<Bullet*>& p1Bullets = player1->GetBullet(); // 1Pの弾
+	//const std::list<Bullet*>& p2Bullets = player2->GetBullet(); // 2Pの弾
+
+	//! 2Pと1Pの弾の当たり判定
+#pragma region
+	for (int i = 0; i < 5; i++) {
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = player1->_bulletPos[i];  // 1Pの弾の位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posB, posA);
+		const float radius = CollisionRadius(player2->GetRadius(), player1->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの弾の当たった時の処理
+			player2->_hp--;
+			// 1Pの弾の当たった時の処理
+			player1->_bulletPos[i] = Vector2(2000, 2000);
+		}
+	}
+#pragma endregion
+
+	//! 1Pと2Pの弾の当たり判定
+#pragma region
+	//for (Bullet* bullet : p2Bullets) {
+	//	posA = player1->GetPosition(); // 1Pの位置
+	//	posB = bullet->GetPosition();  // 2Pの弾の位置
+
+	//	// AとBの距離を求める
+	//	const float distance = CollisionDistance(posB, posA);
+	//	const float radius = CollisionRadius(player1->GetRadius(), bullet->GetRadius());
+
+	//	// 当たったか判定
+	//	if (distance <= radius) {
+	//		// 2Pの弾の当たった時の処理
+	//		bullet->OnCollision();
+	//		// 1Pの弾の当たった時の処理
+	//		player1->OnCollision(bullet->GetPower());
+	//	}
+	//}
+#pragma endregion
+
+	//! 1Pと2Pの当たり判定
+#pragma region
+	posA = player1->GetPosition();  // 1Pの位置
+	posB = player2->GetPosition(); // 2Pの弾の位置
+
+	// AとBの距離を求める
+	const float distance = CollisionDistance(posB, posA);
+	const float radius = CollisionRadius(player1->GetRadius(), player2->GetRadius());
+
+	// 当たったか判定
+	if (distance <= radius) {
+		// 1Pの当たった時の処理
+		player1->PlayerCollision();
+		// 2Pの当たった時の処理
+		player2->PlayerCollision();
+	}
+	//#pragma endregion
 }
 
 void GameScene2D::Draw()
@@ -145,7 +145,7 @@ DWORD WINAPI Threadfunc(void*) {
 	SOCKET sConnect;// 待機用と接続用
 	struct sockaddr_in saLocal, saConnect;// 待機用と接続用
 	WORD wPort = 8000;
-	char szServer[15] = "192.168.0.56";
+	char szServer[15] = "192.168.32.238";
 	HOSTENT* IpHost;
 	unsigned int addr;
 	int iLen;// accept関数で使用

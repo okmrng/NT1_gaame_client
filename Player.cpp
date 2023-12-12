@@ -5,12 +5,14 @@ Player::~Player()
 	//for (Bullet* bullet : _bullets) delete bullet;
 }
 
-void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed, int32_t direction)
+void Player::Initialize(Vector2 pos, float rad, int32_t hp, int32_t hpMax, int32_t power, uint32_t sprite, Vector2 speed,
+	int32_t direction, uint32_t bulletTexture)
 {
+	//! 自機
 	_pos = pos;
 	_rad = rad;
 	_hpMax = hpMax;
-	_hp = _hpMax;
+	_hp = hp;
 	_power = power;
 	_sprite = sprite;
 	_speed = speed;
@@ -19,6 +21,18 @@ void Player::Initialize(Vector2 pos, float rad, int32_t hpMax, int32_t power, ui
 	if (direction == 0) _direction = Direction::RIGHT;
 	if (direction == 1) _direction = Direction::LEFT;
 	_isDead = false;
+
+	//! 弾
+	for (int i = 0; i < 5; i++) {
+		_bulletPos[i] = Vector2(1500, 1500);
+		_bulletSpeed[i].x = 0;
+		_bulletSpeed[i].y = 0;
+		_bulletMove[i] = false;
+	}
+	//_bulletSpeed[0].x = 7;
+	//_bulletSpeed[0].y = 0;
+	_bulletSprite = bulletTexture;
+	_bulletRad = 10;
 }
 
 void Player::Update(char* keys)
@@ -35,6 +49,7 @@ void Player::Update(char* keys)
 
 	// 弾更新
 	//for (Bullet* bullet : _bullets) bullet->Update();
+	BulletUpdate();
 
 	// 弾の削除
 	/*_bullets.remove_if([](Bullet* bullet) {
@@ -43,7 +58,7 @@ void Player::Update(char* keys)
 			return true;
 		}
 		return false;
-		});*/
+	});*/
 }
 
 void Player::Move(char* keys)
@@ -105,6 +120,28 @@ void Player::Attack()
 	//if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
 }
 
+void Player::BulletUpdate()
+{
+	--_bulletCoolTimer;
+	if (_bulletCoolTimer < 0) _bulletCoolTimer = _bulletCoolTimerParameter;
+	if (_bulletCoolTimer == 0) {
+		for (int i = 0; i < 5; i++) {
+			if (!_bulletMove[i]) {
+				_bulletPos[i] = _pos;
+				_bulletMove[i] = true;
+				break;
+			}
+		}
+	}
+	for (int i = 0; i < 5; i++) {
+		if (_bulletMove[i]) {
+			_bulletPos[i] += _bulletSpeed[i];
+			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
+				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+		}
+	}
+}
+
 void Player::Dead()
 {
 	if (_hp <= 0) _isDead = true;
@@ -112,7 +149,13 @@ void Player::Dead()
 
 void Player::OnCollision(int32_t damage)
 {
+	a++;
 	_hp -= damage;
+}
+
+void Player::OnCollisionBullet()
+{
+
 }
 
 void Player::PlayerCollision()
@@ -125,6 +168,10 @@ void Player::Draw()
 {
 	//! 弾
 	//for (Bullet* bullet : _bullets) bullet->Draw();
+	for (int i = 0; i < 15; i++) {
+		Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
+			0.0f, _bulletSprite, kFillModeSolid);
+	}
 
 	//! 自機
 	Novice::DrawEllipse(int(_pos.x), int(_pos.y), int(_rad), int(_rad), 0.0f, _sprite, kFillModeSolid);
@@ -135,6 +182,8 @@ void Player::Draw()
 	//Novice::ScreenPrintf(0, 40, "1P:%d", _hp);
 	//if (_isDead) Novice::ScreenPrintf(0, 60, "dead");
 	//else Novice::ScreenPrintf(0, 60, "life");
+	//Novice::ScreenPrintf(0, 60, "bullet[0]:%f", _bulletPos[0].x);
+	//Novice::ScreenPrintf(0, 80, "bullet[1]:%f", _bulletPos[1].x);
 #endif
 }
 
