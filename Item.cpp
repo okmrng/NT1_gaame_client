@@ -30,42 +30,50 @@ void Item::Update()
 void Item::Instant()
 {
 	//! 確率でアイテムを生成
-	_instantProbability = rand() % 1 + 1;
-	_type = rand() % 5 + 1;
+	_instantProbability = rand() % 100 + 1;
+	_type = rand() % 13 + 1;
 
 	if (_instantProbability == 1) {
 		//! アイテム抽選
 		switch (_type)
 		{
 		case 1: // 攻撃力アップ
+		case 2: // 攻撃力アップ
+		case 3: // 攻撃力アップ
 			if (!_isInstant[0]) {
 				_pos[0].x = (rand() % (WINDOW_XMAX - WINDOW_XMIN + 1)) + (float)WINDOW_XMIN;
 				_isInstant[0] = true;
 			}
 
 			break;
-		case 2: // 速度アップ
+		case 4: // 速度アップ
+		case 5: // 速度アップ
+		case 6: // 速度アップ
 			if (!_isInstant[1]) {
 				_pos[1].x = (rand() % (WINDOW_XMAX - WINDOW_XMIN + 1)) + (float)WINDOW_XMIN;
 				_isInstant[1] = true;
 			}
 
 			break;
-		case 3: // 最大体力アップ
+		case 7: // 最大体力アップ
+		case 8: // 最大体力アップ
+		case 9: // 最大体力アップ
 			if (!_isInstant[2]) {
 				_pos[2].x = (rand() % (WINDOW_XMAX - WINDOW_XMIN + 1)) + (float)WINDOW_XMIN;
 				_isInstant[2] = true;
 			}
 
 			break;
-		case 4: // HP回復
+		case 10: // HP回復
+		case 11: // HP回復
+		case 12: // HP回復
 			if (!_isInstant[3]) {
 				_pos[3].x = (rand() % (WINDOW_XMAX - WINDOW_XMIN + 1)) + (float)WINDOW_XMIN;
 				_isInstant[3] = true;
 			}
 
 			break;
-		case 5: // 弾強化
+		case 13: // 弾強化
 			if (!_isInstant[4]) {
 				_pos[4].x = (rand() % (WINDOW_XMAX - WINDOW_XMIN + 1)) + (float)WINDOW_XMIN;
 				_isInstant[4] = true;

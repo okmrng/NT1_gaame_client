@@ -18,16 +18,22 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = false;
+	_canPlay = true;
 
 	//! 弾
 	for (int i = 0; i < 15; i++) {
 		_bulletPos[i] = Vector2(1500, 1500);
 		_bulletMove[i] = false;
 	}
-	_bulletSpeed[0] = Vector2(7, 0);
-	_bulletSpeed[1] = Vector2(7, 1.5f);
-	_bulletSpeed[2] = Vector2(7, -1.5f);
+	for (int i = 0; i < 5; i++) {
+		_bulletSpeed[i] = Vector2(7, 0);
+	}
+	for (int i = 5; i < 10; i++) {
+		_bulletSpeed[i] = Vector2(7, 1.5f);
+	}
+	for (int i = 10; i < 15; i++) {
+		_bulletSpeed[i] = Vector2(7, -1.5f);
+	}
 	_bulletSprite = bulletTexture;
 	_bulletRad = 10;
 	_addBullet = false;
@@ -127,41 +133,63 @@ void Player::BulletUpdate()
 				break;
 			}
 		}
-		for (int i = 5; i < 10; i++) {
-			if (!_bulletMove[i]) {
-				_bulletPos[i] = _pos;
-				_bulletMove[i] = true;
-				break;
+		if (_addBullet) {
+			for (int i = 5; i < 10; i++) {
+				if (!_bulletMove[i]) {
+					_bulletPos[i] = _pos;
+					_bulletMove[i] = true;
+					break;
+				}
 			}
-		}
-		for (int i = 10; i < 15; i++) {
-			if (!_bulletMove[i]) {
-				_bulletPos[i] = _pos;
-				_bulletMove[i] = true;
-				break;
+			for (int i = 10; i < 15; i++) {
+				if (!_bulletMove[i]) {
+					_bulletPos[i] = _pos;
+					_bulletMove[i] = true;
+					break;
+				}
 			}
 		}
 	}
 	// 弾の移動
 	for (int i = 0; i < 5; i++) {
 		if (_bulletMove[i]) {
-			_bulletPos[i] += _bulletSpeed[0];
+			_bulletPos[i] += _bulletSpeed[i];
 			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
 				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
 		}
 	}
-	for (int i = 5; i < 10; i++) {
-		if (_bulletMove[i]) {
-			_bulletPos[i] += _bulletSpeed[1];
-			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
-				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+	if (_addBullet) {
+		for (int i = 5; i < 10; i++) {
+			if (_bulletMove[i]) {
+				_bulletPos[i] += _bulletSpeed[i];
+				if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
+					_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+			}
+		}
+		for (int i = 10; i < 15; i++) {
+			if (_bulletMove[i]) {
+				_bulletPos[i] += _bulletSpeed[i];
+				if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
+					_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+			}
 		}
 	}
-	for (int i = 10; i < 15; i++) {
-		if (_bulletMove[i]) {
-			_bulletPos[i] += _bulletSpeed[2];
-			if (_bulletPos[i].x >= 1280 + _bulletRad || _bulletPos[i].x <= -_bulletRad ||
-				_bulletPos[i].y >= 720 + _bulletRad || _bulletPos[i].y <= -_rad) _bulletMove[i] = false;
+
+	//! 向きに応じて弾の発射方向を変える
+	if (_direction == Direction::RIGHT) {
+		for (int i = 0; i < 15; i++) {
+			if (!_bulletMove[i]) {
+				if (!_bulletSpeedUp)_bulletSpeed[i].x = 7;
+				else _bulletSpeed[i].x = 10;
+			}
+		}
+	}
+	if (_direction == Direction::LEFT) {
+		for (int i = 0; i < 15; i++) {
+			if (!_bulletMove[i]) {
+				if (!_bulletSpeedUp)_bulletSpeed[i].x = -7;
+				else _bulletSpeed[i].x = -10;
+			}
 		}
 	}
 }
@@ -205,13 +233,13 @@ void Player::OnCollisionStrong()
 {
 	//! 弾速アップ
 	if (!_bulletSpeedUp) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 15; i++) {
 			_bulletSpeed[i] += Vector2(3, 0);
 		}
 		_bulletSpeedUp = true;
 	}
 	//! 弾のクールタイム低下
-	else if (_bulletSpeed && !_bulletCoolSub) {
+	else if (_bulletSpeedUp && !_bulletCoolSub) {
 		_bulletCoolTimerParameter /= 2;
 		_bulletCoolSub = true;
 	}
@@ -250,6 +278,7 @@ void Player::Draw()
 	//else Novice::ScreenPrintf(0, 60, "life");
 	//Novice::ScreenPrintf(0, 60, "bullet[0]:%f", _bulletPos[0].x);
 	//Novice::ScreenPrintf(0, 80, "bullet[1]:%f", _bulletPos[1].x);
+	//Novice::ScreenPrintf(0, 80, "bulletspeed[3]:%f,%f", _bulletSpeed[2].x, _bulletSpeed[2].y);
 #endif
 }
 

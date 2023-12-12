@@ -156,12 +156,12 @@ private:
 	bool _canPlay;       // プレイフラグ
 
 	//! 弾
-	Vector2 _bulletSpeed[3]; // 弾速
-	bool _bulletMove[15];     // 弾の移動フラグ
-	uint32_t _bulletSprite;    // 弾のスプライト
-	float _bulletRad;           // 弾の半径
-	bool _bulletSpeedUp;    // 弾速度アップフラグ
-	bool _bulletCoolSub;     // 弾のクールタイム低下フラグ
-	bool _addBullet;           // 弾増加フラグ
+	Vector2 _bulletSpeed[15]; // 弾速
+	bool _bulletMove[15];      // 弾の移動フラグ
+	uint32_t _bulletSprite;     // 弾のスプライト
+	float _bulletRad;            // 弾の半径
+	bool _bulletSpeedUp;     // 弾速度アップフラグ
+	bool _bulletCoolSub;      // 弾のクールタイム低下フラグ
+	bool _addBullet;            // 弾増加フラグ
 };
 
