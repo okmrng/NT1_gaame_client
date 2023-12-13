@@ -68,6 +68,7 @@ void GameScene2D::Initialize()
 
 void GameScene2D::Update(char* keys)
 {
+	player2->SetCanPlay(true);
 	if (player1 && player2) {
 		if (player1->GetCanPlay() && player2->GetCanPlay()) {
 			if (!player1->GetIsDead() && !player2->GetIsDead()) {
@@ -332,8 +333,6 @@ DWORD WINAPI Threadfunc(void*) {
 
 	while (1)
 	{
-		player2->SetCanPlay(true);
-
 		// データ送信
 		char sendBuffer[sizeof(Player)];
 		player2->Serialize(sendBuffer);

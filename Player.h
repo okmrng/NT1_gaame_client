@@ -4,7 +4,6 @@
 #include <Novice.h>
 #include <MayhUtilityO.h>
 #include <stdint.h>
-#include <list>
 
 /// <summary>
 /// playerクラス
@@ -170,5 +169,11 @@ private:
 	bool _bulletSpeedUp;     // 弾速度アップフラグ
 	bool _bulletCoolSub;      // 弾のクールタイム低下フラグ
 	bool _addBullet;            // 弾増加フラグ
+
+	//! UI
+	uint32_t _attackUI;
+	uint32_t _hpUI;
+	uint32_t _speedUI;
+	uint32_t _bulletUI;
 };
 

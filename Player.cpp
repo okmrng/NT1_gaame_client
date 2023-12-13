@@ -18,7 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = true;
+	_canPlay = false;
 	_attackCount = 0;
 	_speedCount = 0;
 	_attackTimer = 1800;
@@ -43,6 +43,12 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_bulletSprite = bulletTexture;
 	_bulletRad = 10;
 	_addBullet = false;
+
+	//! UI
+	_attackUI = Novice::LoadTexture("./Resouces/Images/attack.png");
+	_hpUI = Novice::LoadTexture("./Resouces/Images/hp.png");
+	_speedUI = Novice::LoadTexture("./Resouces/Images/speed.png");
+	_bulletUI = Novice::LoadTexture("./Resouces/Images/bullet.png");
 }
 
 void Player::Update(char* keys)
@@ -302,6 +308,18 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 			0.0f, GREEN, kFillModeSolid);
 	}
 	Novice::DrawBox(int(hpGagePos.x + 256), int(hpGagePos.y), 1200, 40, 0.0f, BLACK, kFillModeSolid);
+
+	//! アイコン
+	// 1P
+	Novice::DrawSprite(326, 20, _attackUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(575, 20, _hpUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(690, 20, _speedUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(913, 20, _bulletUI, 1, 1, 0.0f, WHITE);
+	// 2P
+	Novice::DrawSprite(148, 660, _attackUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(407, 660, _hpUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(522, 660, _speedUI, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(745, 660, _bulletUI, 1, 1, 0.0f, WHITE);
 }
 
 void Player::SetCanPlay(bool canPlay)
