@@ -30,8 +30,8 @@ void Item::Update()
 void Item::Instant()
 {
 	//! 確率でアイテムを生成
-	_instantProbability = rand() % 100 + 1;
-	_type = rand() % 13 + 1;
+	_instantProbability = rand() % 1 + 1;
+	_type = rand() % 6 + 1;
 
 	if (_instantProbability == 1) {
 		//! アイテム抽選
@@ -157,7 +157,7 @@ void Item::Dserialize(const char* buffer)
 }
 
 //TODO アイテムの種類
-//TODO 1.弾数を増やす、弾速アップ、クールタイムを短くする、弾強化
+//x 1.弾数を増やす、弾速アップ、クールタイムを短くする、弾強化
 //x 2.攻撃力アップ
 //x 3.HPの回復
 //x 4.速度アップ

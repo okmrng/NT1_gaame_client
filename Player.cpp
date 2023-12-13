@@ -18,7 +18,13 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = false;
+	_canPlay = true;
+	_attackCount = 0;
+	_speedCount = 0;
+	_attackTimer = 1800;
+	_speedTimer = 1800;
+	_isAttackUp = false;
+	_isSpeedUp = false;
 
 	//! 弾
 	for (int i = 0; i < 15; i++) {
@@ -59,6 +65,26 @@ void Player::Update(char* keys)
 
 	//! 弾
 	BulletUpdate();
+
+	//! アイテム処理
+	// 攻撃アップ
+	if (_isAttackUp) {
+		_attackTimer--;
+		_power = 100;
+		if (_attackTimer <= 0) {
+			_power = 65;
+			_isAttackUp = false;
+		}
+	}
+	// 速度アップ
+	if (_isSpeedUp) {
+		_speedTimer--;
+		_speed = Vector2(10, 10);
+		if (_speedTimer <= 0) {
+			_speed = Vector2(8, 8);
+			_isSpeedUp = false;
+		}
+	}
 }
 
 void Player::Move(char* keys)
@@ -79,45 +105,11 @@ void Player::Move(char* keys)
 	if (keys[DIK_S] || keys[DIK_DOWN]) _pos.y += _speed.y; // 下	
 	if (keys[DIK_W] || keys[DIK_UP]) _pos.y -= _speed.y;   // 上
 
-	// 右
-	//if (keys[DIK_D]) {
-	//	_pos.x += _speed.x;
-	//	// 向きを変える
-	//	_direction = Direction::RIGHT;
-	//}
-	//// 左
-	//if (keys[DIK_A]) {
-	//	_pos.x -= _speed.x;
-	//	// 向きを変える
-	//	_direction = Direction::LEFT;
-	//}
-	//if (keys[DIK_S]) _pos.y += _speed.y; // 下	
-	//if (keys[DIK_W]) _pos.y -= _speed.y; // 上
-
 	// 移動制限
 	if (_pos.x >= 1280 - _rad) _pos.x = 1280 - _rad; // 右端
 	if (_pos.x <= _rad) _pos.x = _rad;		         // 左端
 	if (_pos.y >= 640 - _rad) _pos.y = 640 - _rad;   // 下端
 	if (_pos.y <= _rad + 80) _pos.y = _rad + 80;     // 上端
-}
-
-void Player::Attack()
-{
-	//if (_bulletCoolTimer == _bulletCoolTimerParameter) {
-	//	// 弾の速度
-	//	Vector2 bulletSpeed = Vector2(7, 0);
-	//	// 自機の向きに応じて弾の発射方向を変化させる
-	//	if (_direction == Direction::RIGHT) bulletSpeed = Vector2(7, 0); // 右
-	//	if (_direction == Direction::LEFT) bulletSpeed = Vector2(-7, 0); // 左
-
-	//	// 弾を生成
-	//	Bullet* newBullet = new Bullet();
-	//	newBullet->Initialize(_pos, bulletSpeed, _power, RED);
-	//	_bullets.push_back(newBullet);
-	//}
-	//// 弾のクールタイム
-	//if (_bulletCoolTimer <= _bulletCoolTimerParameter) _bulletCoolTimer--;
-	//if (_bulletCoolTimer == 0) _bulletCoolTimer = _bulletCoolTimerParameter;
 }
 
 void Player::BulletUpdate()
@@ -210,12 +202,22 @@ void Player::OnCollision(float damage)
 
 void Player::OnCollisionAttack()
 {
-	_power += 2;
+	_attackCount++;
+	if (_attackCount <= 30) _power += 2;
+	if (_attackCount > 30) {
+		_attackTimer = 1800;
+		_isAttackUp = true;
+	}
 }
 
 void Player::OnCollisionSpeed()
 {
-	_speed += Vector2(0.1f, 0.1f);
+	_speedCount++;
+	if (_speedCount <= 30) _speed += Vector2(0.1f, 0.1f);
+	if (_speedCount > 30) {
+		_speedTimer = 1800;
+		_isSpeedUp = true;
+	}
 }
 
 void Player::OnCollisionMaxHp()
@@ -278,15 +280,17 @@ void Player::Draw()
 	//else Novice::ScreenPrintf(0, 60, "life");
 	//Novice::ScreenPrintf(0, 60, "bullet[0]:%f", _bulletPos[0].x);
 	//Novice::ScreenPrintf(0, 80, "bullet[1]:%f", _bulletPos[1].x);
-	//Novice::ScreenPrintf(0, 80, "bulletspeed[3]:%f,%f", _bulletSpeed[2].x, _bulletSpeed[2].y);
+	//Novice::ScreenPrintf(0, 80, "bulletspeed[3]:%f,%f", _bulletSpeed[2].x,_bulletSpeed[2].y);
 #endif
 }
 
 void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection)
 {
 	//! HPゲージ
-	Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), (int)256 * ((int)hpGageSubDirection * (int)_hp) / (int)_hpMax, 40,
-		0.0f, GREEN, kFillModeSolid);
+	if (_hp > 0) {
+		Novice::DrawBox(int(hpGagePos.x), int(hpGagePos.y), (int)256 * ((int)hpGageSubDirection * (int)_hp) / (int)_hpMax, 40,
+			0.0f, GREEN, kFillModeSolid);
+	}
 	Novice::DrawBox(int(hpGagePos.x + 256), int(hpGagePos.y), 1200, 40, 0.0f, BLACK, kFillModeSolid);
 }
 

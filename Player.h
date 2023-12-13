@@ -106,6 +106,7 @@ public:
 	Vector2 GetPosition() { return _pos; }
 	float GetRadius() { return _rad; }
 	float GetPower() { return _power; }
+	Vector2 GetSpeed() { return _speed; }
 	float GetHP() { return _hp; }
 	float GetHPM() { return _hpMax; }
 	float GetBulletRadius() { return _bulletRad; }
@@ -149,11 +150,17 @@ private:
 		RIGHT, // 右
 		LEFT   // 左
 	};
-	Direction _direction; // 向き
-	bool _isDead;          // 死亡フラグ
-	bool _isHit;             // ヒットフラグ
-	int _hitTime;           // 無敵時
-	bool _canPlay;       // プレイフラグ
+	Direction _direction;     // 向き
+	bool _isDead;              // 死亡フラグ
+	bool _isHit;                 // ヒットフラグ
+	int _hitTime;               // 無敵時
+	bool _canPlay;           // プレイフラグ
+	int32_t _attackCount; // 攻撃アップアイテムを取った回数
+	int32_t _speedCount; // 速度アップアイテムを取った回数
+	int32_t _attackTimer; // 攻撃アップ時間
+	int32_t _speedTimer; // 速度アップアイテム時間
+	bool _isAttackUp;      // 攻撃アップフラグ
+	bool _isSpeedUp;      // 速度アップフラグ
 
 	//! 弾
 	Vector2 _bulletSpeed[15]; // 弾速
