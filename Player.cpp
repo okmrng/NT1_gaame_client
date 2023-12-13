@@ -18,7 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = false;
+	_canPlay = true;
 	_attackCount = 0;
 	_speedCount = 0;
 	_attackTimer = 1800;
@@ -259,18 +259,28 @@ void Player::Draw()
 {
 	//! 弾
 	for (int i = 0; i < 5; i++) {
+		Novice::DrawSprite(int(_bulletPos[i].x - 10), int(_bulletPos[i].y - 10), _bulletSprite, 1, 1, 0.0f, WHITE);
+#ifdef _DEBUG
 		Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
-			0.0f, _bulletSprite, kFillModeSolid);
+			0.0f, RED, kFillModeWireFrame);
+#endif // _DEBUG
 	}
 	if (_addBullet) {
 		for (int i = 5; i < 15; i++) {
+			Novice::DrawSprite(int(_bulletPos[i].x - 10), int(_bulletPos[i].y - 10), _bulletSprite, 1, 1, 0.0f, WHITE);
+#ifdef _DEBUG
 			Novice::DrawEllipse(int(_bulletPos[i].x), int(_bulletPos[i].y), int(_bulletRad), int(_bulletRad),
-				0.0f, _bulletSprite, kFillModeSolid);
+				0.0f, RED, kFillModeWireFrame);
+#endif // _DEBUG
 		}
 	}
 
 	//! 自機
-	Novice::DrawEllipse(int(_pos.x), int(_pos.y), int(_rad), int(_rad), 0.0f, _sprite, kFillModeSolid);
+	if (_direction == Direction::RIGHT) Novice::DrawSprite(int(_pos.x + 20), int(_pos.y - 15), _sprite, 1, 1, 1.6f, WHITE);
+	if (_direction == Direction::LEFT) Novice::DrawSprite(int(_pos.x - 20), int(_pos.y + 15), _sprite, 1, 1, -1.6f, WHITE);
+#ifdef _DEBUG
+	Novice::DrawEllipse(int(_pos.x), int(_pos.y), int(_rad), int(_rad), 0.0f, BLUE, kFillModeWireFrame);
+#endif
 
 	//? デバッグ文字
 #ifdef _DEBUG

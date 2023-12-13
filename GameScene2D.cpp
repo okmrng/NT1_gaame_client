@@ -17,6 +17,9 @@ Item* item = nullptr;
 
 GameScene2D::~GameScene2D()
 {
+	//! 背景
+	delete _background;
+
 	//! 自機
 	delete player1;  // 1P
 	delete player2; // 2P
@@ -32,14 +35,24 @@ void GameScene2D::Initialize()
 	// ウィンドウ取得
 	hwMain = GetDesktopWindow();
 
+	//! スプライト
+	_player1Sprite = Novice::LoadTexture("./Resouces/Images/player1.png");
+	_player2Sprite = Novice::LoadTexture("./Resouces/Images/player2.png");
+	_bullet1Sprite = Novice::LoadTexture("./Resouces/Images/bullet1.png");
+	_bullet2Sprite = Novice::LoadTexture("./Resouces/Images/bullet2.png");
+
+	//! 背景
+	_background = new Background();
+	_background->Initialize();
+
 	//! 自機
 	// 1P
 	player1 = new Player();
-	player1->Initialize(Vector2{ 50.0f, 360.0f }, 20.0f, 100, 100, 5, BLUE, Vector2(5, 5), 0, RED);
+	player1->Initialize(Vector2{ 50.0f, 360.0f }, 15.0f, 100, 100, 5, _player1Sprite, Vector2(5, 5), 0, _bullet1Sprite);
 
 	// 2P
 	player2 = new Player();
-	player2->Initialize(Vector2{ 1230.0f, 360.0f }, 20.0f, 100, 100, 5, GREEN, Vector2(5, 5), 1, RED);
+	player2->Initialize(Vector2{ 1230.0f, 360.0f }, 15.0f, 100, 100, 5, _player2Sprite, Vector2(5, 5), 1, _bullet2Sprite);
 
 	//! アイテム
 	item = new Item();
@@ -58,8 +71,10 @@ void GameScene2D::Update(char* keys)
 	if (player1 && player2) {
 		if (player1->GetCanPlay() && player2->GetCanPlay()) {
 			if (!player1->GetIsDead() && !player2->GetIsDead()) {
+				//! 背景
+				_background->Update();
+
 				//! 自機
-				//player1->Update(keys);  // 1P
 				player2->Update(keys); // 2P
 
 				//! 当たり判定
@@ -249,6 +264,9 @@ void GameScene2D::CheckAllColision()
 
 void GameScene2D::Draw()
 {
+	//! 背景
+	_background->Draw();
+
 	//! 自機
 	player1->Draw();  // 1P
 	player2->Draw(); // 2P
@@ -266,49 +284,6 @@ void GameScene2D::Draw()
 }
 // 通信スレッド関数
 DWORD WINAPI Threadfunc(void*) {
-	// ソケットをオープン
-	//SOCKET sConnect;// 待機用と接続用
-	//struct sockaddr_in /*saLocal,*/ saConnect;// 待機用と接続用
-	//WORD wPort = 8000;
-	//char szServer[20];
-	//HOSTENT* IpHost;
-	//unsigned int addr;
-	//int iLen;// accept関数で使用
-	//sConnect = socket(AF_INET, SOCK_STREAM, 0);
-	//if (sConnect == INVALID_SOCKET) {
-	//	return 1;
-	//}
-
-	//// サーバーで名前を取得する
-	//std::ifstream ifs("ip.txt");
-	//ifs.getline(szServer, sizeof(szServer));
-	//IpHost = gethostbyname(szServer);
-	//if (IpHost == NULL) {
-	//	/* サーバーをIPアドレスで取得する */
-	//	addr = inet_addr(szServer);
-	//	IpHost = gethostbyaddr((char*)&addr, 4, AF_INET);
-	//}
-
-	//if (IpHost == NULL) {
-	//	closesocket(sConnect);
-	//	return 1;
-	//}
-
-	//// 待機ソケットにポート8000番紐づけるbind関数に
-	//// 引数で渡すSOCKADDR_IN構造体を設定
-	//ZeroMemory(&saConnect, sizeof(sockaddr_in));
-	//memset(&saConnect, 0, sizeof(SOCKADDR_IN));
-	//saConnect.sin_family = AF_INET;
-	//saConnect.sin_addr.s_addr = inet_addr(szServer);
-	//saConnect.sin_port = htons(wPort);
-
-	//iLen = sizeof(saConnect);
-
-	//if (connect(sConnect, (LPSOCKADDR)&saConnect, iLen) == SOCKET_ERROR) {
-
-	//	return 1;
-	//}
-
 	// ソケットをオープン
 	SOCKET sConnect; // 待機用と接続用
 	struct sockaddr_in saLocal, saConnect; // 待機用と接続用

@@ -5,6 +5,7 @@
 #include <process.h>
 #include <mmsystem.h>
 #include <Item.h>
+#include <Background.h>
 
 /// <summary>
 /// ゲームシーンクラス
@@ -38,6 +39,16 @@ public:
 	/// </summary>
 	void Draw();
 
+
+
 private:
+	//! スプライト
+	uint32_t _player1Sprite = 0u; // 1P本体
+	uint32_t _player2Sprite = 0u; // 2P本体
+	uint32_t _bullet1Sprite = 0u; // 1P弾
+	uint32_t _bullet2Sprite = 0u; // 2P弾
+
+	//! 背景
+	Background* _background = nullptr;
 };
 
