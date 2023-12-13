@@ -1,7 +1,8 @@
 #include <Novice.h>
 #include "GameScene2D.h"
+#include "Title.h"
 
-const char kWindowTitle[] = "NT1-client";
+const char kWindowTitle[] = "NT1-Client";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -10,8 +11,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Novice::Initialize(kWindowTitle, 1280, 720);
 
 	// キー入力結果を受け取る箱
-	char keys[256] = {0};
-	char preKeys[256] = {0};
+	char keys[256] = { 0 };
+	char preKeys[256] = { 0 };
+
+	//! シーン
+	enum class Scene
+	{
+		TITLE,
+		GAME,
+		RESET
+	};
+	Scene scene = Scene::TITLE;
+
+	//! タイトル
+	Title* title = new Title();
+	title->Initialize();
 
 	//! ゲームシーン
 	GameScene2D* gameScene2D = new GameScene2D();
@@ -30,8 +44,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
+		//! タイトル
+		if (scene == Scene::TITLE) {
+			title->Update(keys, preKeys);
+			if (title->GetIsNext()) scene = Scene::GAME;
+		}
+
 		//! ゲームシーン
-		gameScene2D->Update(keys);
+		if (scene == Scene::GAME) {
+			gameScene2D->Update(keys);
+		}
 
 		///
 		/// ↑更新処理ここまで
@@ -41,8 +63,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
+		//! タイトル
+		if (scene == Scene::TITLE) title->Draw();
+
 		//! ゲームシーン
-		gameScene2D->Draw();
+		if (scene == Scene::GAME)  gameScene2D->Draw();
 
 		///
 		/// ↑描画処理ここまで
@@ -56,6 +81,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			break;
 		}
 	}
+
+	// 解放
+	delete gameScene2D;
 
 	// ライブラリの終了
 	Novice::Finalize();

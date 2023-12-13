@@ -18,7 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = true;
+	_canPlay = false;
 
 	//! 弾
 	for (int i = 0; i < 15; i++) {
