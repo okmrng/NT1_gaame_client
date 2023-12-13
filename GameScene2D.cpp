@@ -266,33 +266,92 @@ void GameScene2D::Draw()
 }
 // 通信スレッド関数
 DWORD WINAPI Threadfunc(void*) {
+	// ソケットをオープン
+	//SOCKET sConnect;// 待機用と接続用
+	//struct sockaddr_in /*saLocal,*/ saConnect;// 待機用と接続用
+	//WORD wPort = 8000;
+	//char szServer[20];
+	//HOSTENT* IpHost;
+	//unsigned int addr;
+	//int iLen;// accept関数で使用
+	//sConnect = socket(AF_INET, SOCK_STREAM, 0);
+	//if (sConnect == INVALID_SOCKET) {
+	//	return 1;
+	//}
 
-	SOCKET sConnect;// 待機用と接続用
-	struct sockaddr_in saConnect;// 待機用と接続用
-	WORD wPort = 8000;
-	int iLen;// accept関数で使用
-	char ipAddr[20];                                           // IPアドレス用配列
+	//// サーバーで名前を取得する
+	//std::ifstream ifs("ip.txt");
+	//ifs.getline(szServer, sizeof(szServer));
+	//IpHost = gethostbyname(szServer);
+	//if (IpHost == NULL) {
+	//	/* サーバーをIPアドレスで取得する */
+	//	addr = inet_addr(szServer);
+	//	IpHost = gethostbyaddr((char*)&addr, 4, AF_INET);
+	//}
 
-	// ファイル読み込み
-	std::ifstream ifs("ip.txt");
-	ifs.getline(ipAddr, sizeof(ipAddr));
-	sConnect = socket(PF_INET, SOCK_STREAM, 0);
+	//if (IpHost == NULL) {
+	//	closesocket(sConnect);
+	//	return 1;
+	//}
 
-	ZeroMemory(&saConnect, sizeof(sockaddr_in));
-	saConnect.sin_family = AF_INET;
-	saConnect.sin_addr.s_addr = inet_addr(ipAddr);  // IPアドレス設定
-	saConnect.sin_port = htons(wPort);
+	//// 待機ソケットにポート8000番紐づけるbind関数に
+	//// 引数で渡すSOCKADDR_IN構造体を設定
+	//ZeroMemory(&saConnect, sizeof(sockaddr_in));
+	//memset(&saConnect, 0, sizeof(SOCKADDR_IN));
+	//saConnect.sin_family = AF_INET;
+	//saConnect.sin_addr.s_addr = inet_addr(szServer);
+	//saConnect.sin_port = htons(wPort);
+
+	//iLen = sizeof(saConnect);
+
+	//if (connect(sConnect, (LPSOCKADDR)&saConnect, iLen) == SOCKET_ERROR) {
+
+	//	return 1;
+	//}
 
 	// ソケットをオープン
+	SOCKET sConnect; // 待機用と接続用
+	struct sockaddr_in saLocal, saConnect; // 待機用と接続用
+	WORD wPort = 8000;
+	char szServer[15];
+
+	// 設定ファイルからIPアドレスを読み込む
+	std::ifstream ifs("ip.txt");
+	if (!ifs.is_open()) {
+		// エラー処理
+		return 1;
+	}
+	ifs.getline(szServer, sizeof(szServer));
+
 	sConnect = socket(AF_INET, SOCK_STREAM, 0);
 	if (sConnect == INVALID_SOCKET) {
 		return 1;
 	}
 
-	iLen = sizeof(saConnect);
+	// サーバーで名前を取得する
+	HOSTENT* IpHost = gethostbyname(szServer);
+	if (IpHost == NULL) {
+		/* サーバーをIPアドレスで取得する */
+		unsigned int addr = inet_addr(szServer);
+		IpHost = gethostbyaddr((char*)&addr, 4, AF_INET);
+	}
+
+	if (IpHost == NULL) {
+		closesocket(sConnect);
+		return 1;
+	}
+
+	// 待機ソケットにポート8000番紐づけるbind関数に
+	// 引数で渡すSOCKADDR_IN構造体を設定
+	ZeroMemory(&saLocal, sizeof(saLocal));
+	memset(&saConnect, 0, sizeof(SOCKADDR_IN));
+	saConnect.sin_family = IpHost->h_addrtype;
+	saConnect.sin_addr.s_addr = *((u_long*)IpHost->h_addr);
+	saConnect.sin_port = htons(wPort);
+
+	int iLen = sizeof(saConnect);
 
 	if (connect(sConnect, (LPSOCKADDR)&saConnect, iLen) == SOCKET_ERROR) {
-
 		return 1;
 	}
 

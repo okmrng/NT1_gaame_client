@@ -18,7 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = true;
+	_canPlay = false;
 	_attackCount = 0;
 	_speedCount = 0;
 	_attackTimer = 1800;
