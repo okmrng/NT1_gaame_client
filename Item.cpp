@@ -30,8 +30,8 @@ void Item::Update()
 void Item::Instant()
 {
 	//! 確率でアイテムを生成
-	_instantProbability = rand() % 1 + 1;
-	_type = rand() % 6 + 1;
+	_instantProbability = rand() % 100 + 1;
+	_type = rand() % 13 + 1;
 
 	if (_instantProbability == 1) {
 		//! アイテム抽選
