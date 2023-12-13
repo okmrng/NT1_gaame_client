@@ -1,4 +1,5 @@
 #include "GameScene2D.h"
+#include <fstream>
 
 #pragma comment(lib, "wsock32.lib")
 #pragma comment(lib, "winmm.lib")
@@ -267,39 +268,26 @@ void GameScene2D::Draw()
 DWORD WINAPI Threadfunc(void*) {
 
 	SOCKET sConnect;// 待機用と接続用
-	struct sockaddr_in saLocal, saConnect;// 待機用と接続用
+	struct sockaddr_in saConnect;// 待機用と接続用
 	WORD wPort = 8000;
-	char szServer[15] = "192.168.11.6";
-	HOSTENT* IpHost;
-	unsigned int addr;
 	int iLen;// accept関数で使用
+	char ipAddr[20];                                           // IPアドレス用配列
+
+	// ファイル読み込み
+	std::ifstream ifs("ip.txt");
+	ifs.getline(ipAddr, sizeof(ipAddr));
+	sConnect = socket(PF_INET, SOCK_STREAM, 0);
+
+	ZeroMemory(&saConnect, sizeof(sockaddr_in));
+	saConnect.sin_family = AF_INET;
+	saConnect.sin_addr.s_addr = inet_addr(ipAddr);  // IPアドレス設定
+	saConnect.sin_port = htons(wPort);
 
 	// ソケットをオープン
 	sConnect = socket(AF_INET, SOCK_STREAM, 0);
 	if (sConnect == INVALID_SOCKET) {
 		return 1;
 	}
-
-	// サーバーで名前を取得する
-	IpHost = gethostbyname(szServer);
-	if (IpHost == NULL) {
-		/* サーバーをIPアドレスで取得する */
-		addr = inet_addr(szServer);
-		IpHost = gethostbyaddr((char*)&addr, 4, AF_INET);
-	}
-
-	if (IpHost == NULL) {
-		closesocket(sConnect);
-		return 1;
-	}
-
-	// 待機ソケットにポート8000番紐づけるbind関数に
-	// 引数で渡すSOCKADDR_IN構造体を設定
-	ZeroMemory(&saLocal, sizeof(saLocal));
-	memset(&saConnect, 0, sizeof(SOCKADDR_IN));
-	saConnect.sin_family = IpHost->h_addrtype;
-	saConnect.sin_addr.s_addr = *((u_long*)IpHost->h_addr);
-	saConnect.sin_port = htons(wPort);
 
 	iLen = sizeof(saConnect);
 
