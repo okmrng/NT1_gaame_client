@@ -1,6 +1,7 @@
 #include <Novice.h>
 #include "GameScene2D.h"
 #include "Title.h"
+#include "Tutorial.h"
 
 const char kWindowTitle[] = "NT1-Client";
 
@@ -18,6 +19,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	enum class Scene
 	{
 		TITLE,
+		TUTORIAL,
 		GAME,
 		RESET
 	};
@@ -26,6 +28,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//! タイトル
 	Title* title = new Title();
 	title->Initialize();
+
+	//! チュートリアル
+	Tutorial* tutorial = new Tutorial();
+	tutorial->Initialize();
 
 	//! ゲームシーン
 	GameScene2D* gameScene2D = new GameScene2D();
@@ -47,7 +53,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//! タイトル
 		if (scene == Scene::TITLE) {
 			title->Update(keys, preKeys);
-			if (title->GetIsNext()) scene = Scene::GAME;
+			if (title->GetIsNext()) scene = Scene::TUTORIAL;
+		}
+
+		//! チュートリアル
+		if (scene == Scene::TUTORIAL) {
+			tutorial->Update(keys, preKeys);
+			if (tutorial->GetIsNext()) scene = Scene::GAME;
 		}
 
 		//! ゲームシーン
@@ -59,6 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		//! リセット
 		if (scene == Scene::RESET) {
 			title->Initialize();
+			tutorial->Initialize();
 			gameScene2D->Initialize();
 			scene = Scene::TITLE;
 		}
@@ -73,6 +86,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//! タイトル
 		if (scene == Scene::TITLE) title->Draw();
+
+		//! チュートリアル
+		if (scene == Scene::TUTORIAL)tutorial->Draw();
 
 		//! ゲームシーン
 		if (scene == Scene::GAME)  gameScene2D->Draw();
@@ -91,6 +107,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	}
 
 	// 解放
+	delete title;
+	delete tutorial;
 	delete gameScene2D;
 
 	// ライブラリの終了
