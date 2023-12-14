@@ -13,6 +13,11 @@ void Item::Initialize()
 	_speed = 2;
 	_instantProbability = 0;
 	_type = 0;
+	_sprite[0] = Novice::LoadTexture("./Resouces/Images/item_attack.png");
+	_sprite[1] = Novice::LoadTexture("./Resouces/Images/item_speed.png");
+	_sprite[2] = Novice::LoadTexture("./Resouces/Images/item_maxHp.png");
+	_sprite[3] = Novice::LoadTexture("./Resouces/Images/item_heal.png");
+	_sprite[4] = Novice::LoadTexture("./Resouces/Images/item_bullet.png");
 
 	//! 乱数の初期化
 	srand((uint32_t)time(NULL));
@@ -132,16 +137,9 @@ void Item::StrongCollision()
 
 void Item::Draw()
 {
-	//! 攻撃
-	Novice::DrawEllipse(int(_pos[0].x), int(_pos[0].y), int(_rad), int(_rad), 0.0f, RED, kFillModeSolid);
-	//! 弾速
-	Novice::DrawEllipse(int(_pos[1].x), int(_pos[1].y), int(_rad), int(_rad), 0.0f, 0xff69b4, kFillModeSolid);
-	//! 最大体力
-	Novice::DrawEllipse(int(_pos[2].x), int(_pos[2].y), int(_rad), int(_rad), 0.0f, 0x7fffb4, kFillModeSolid);
-	//! 回復
-	Novice::DrawEllipse(int(_pos[3].x), int(_pos[3].y), int(_rad), int(_rad), 0.0f, 0x4169e1, kFillModeSolid);
-	//! 弾数
-	Novice::DrawEllipse(int(_pos[4].x), int(_pos[4].y), int(_rad), int(_rad), 0.0f, GREEN, kFillModeSolid);
+	for (int i = 0; i < 5; i++) {
+		Novice::DrawSprite(int(_pos[i].x - 10), int(_pos[i].y - 10), _sprite[i], 1, 1, 0.0f, WHITE);
+	}
 }
 
 void Item::Serialize(char* buffer) const
@@ -155,10 +153,3 @@ void Item::Dserialize(const char* buffer)
 	// メモリコピー
 	memcpy(this, buffer, sizeof(Item));
 }
-
-//TODO アイテムの種類
-//x 1.弾数を増やす、弾速アップ、クールタイムを短くする、弾強化
-//x 2.攻撃力アップ
-//x 3.HPの回復
-//x 4.速度アップ
-//x 5.最大体力アップ

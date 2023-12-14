@@ -89,5 +89,6 @@ private:
 	bool _isInstant[5];             // 生成フラグ
 	int32_t _instantProbability; // アイテム生成確率
 	int32_t _type;                   // アイテムの種類
+	uint32_t _sprite[5];           // スプライト
 };
 
