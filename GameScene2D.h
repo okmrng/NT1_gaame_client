@@ -27,7 +27,10 @@ public:
 	/// 更新
 	/// </summary>
 	/// <param name="keys">キー1</param>
-	void Update(char* keys);
+	void Update(char* keys, char* preKeys);
+
+	// ゲッター
+	bool GetIsNext() { return _isNext; }
 
 	/// <summary>
 	/// 当たり判定処理
@@ -52,5 +55,8 @@ private:
 
 	//! 背景
 	Background* _background = nullptr;
+
+	//! 次のシーンへ
+	bool _isNext;
 };
 

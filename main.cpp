@@ -52,7 +52,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		//! ゲームシーン
 		if (scene == Scene::GAME) {
-			gameScene2D->Update(keys);
+			gameScene2D->Update(keys, preKeys);
+			if (gameScene2D->GetIsNext()) scene = Scene::RESET;
+		}
+
+		//! リセット
+		if (scene == Scene::RESET) {
+			title->Initialize();
+			gameScene2D->Initialize();
+			scene = Scene::TITLE;
 		}
 
 		///

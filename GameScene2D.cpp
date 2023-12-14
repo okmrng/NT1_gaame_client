@@ -60,6 +60,9 @@ void GameScene2D::Initialize()
 	item = new Item();
 	item->Initialize();
 
+	//! 次のシーンへ
+	_isNext = false;
+
 	//! 通信
 	// winsock初期化
 	WSAStartup(MAKEWORD(2, 0), &wdData);
@@ -68,7 +71,7 @@ void GameScene2D::Initialize()
 	hThread = (HANDLE)CreateThread(NULL, 0, &Threadfunc, (LPVOID)&player1, 0, &dwID);
 }
 
-void GameScene2D::Update(char* keys)
+void GameScene2D::Update(char* keys, char* preKeys)
 {
 	player2->SetCanPlay(true);
 	if (player1 && player2) {
@@ -83,6 +86,9 @@ void GameScene2D::Update(char* keys)
 				//! 当たり判定
 				CheckAllColision();
 			}
+		}
+		if (player1->GetIsDead() || player2->GetIsDead()) {
+			if (keys[DIK_SPACE] && preKeys[DIK_SPACE] == 0) _isNext = true;
 		}
 	}
 }
