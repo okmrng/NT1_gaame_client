@@ -3,7 +3,7 @@
 #include "Title.h"
 #include "Tutorial.h"
 
-const char kWindowTitle[] = "NT1-Client";
+const char kWindowTitle[] = "METROPOLIS-Client";
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
