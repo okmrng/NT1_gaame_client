@@ -130,26 +130,6 @@ void GameScene2D::CheckAllColision()
 	}
 #pragma endregion
 
-	//! 1Pと2Pの弾の当たり判定
-#pragma region
-	//for (Bullet* bullet : p2Bullets) {
-	//	posA = player1->GetPosition(); // 1Pの位置
-	//	posB = bullet->GetPosition();  // 2Pの弾の位置
-
-	//	// AとBの距離を求める
-	//	const float distance = CollisionDistance(posB, posA);
-	//	const float radius = CollisionRadius(player1->GetRadius(), bullet->GetRadius());
-
-	//	// 当たったか判定
-	//	if (distance <= radius) {
-	//		// 2Pの弾の当たった時の処理
-	//		bullet->OnCollision();
-	//		// 1Pの弾の当たった時の処理
-	//		player1->OnCollision(bullet->GetPower());
-	//	}
-	//}
-#pragma endregion
-
 	//! 1Pと2Pの当たり判定
 #pragma region
 	{
@@ -264,6 +244,139 @@ void GameScene2D::CheckAllColision()
 		if (distance <= radius) {
 			// 1Pの当たった時の処理
 			player1->OnCollisionStrong();
+			// アイテムの当たった時の処理
+			item->StrongCollision();
+		}
+	}
+#pragma endregion
+
+	//! 1Pと2Pの弾の当たり判定
+#pragma region
+	posA = player1->GetPosition(); // 2Pの位置
+	for (int i = 0; i < 5; i++) {
+		posB = player2->_bulletPos[i];  // 1Pの弾の位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(player2->GetRadius(), player1->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 1Pの弾の当たった時の処理
+			player1->OnCollision(player2->GetPower());
+		}
+	}
+	if (player2->GetAddBullet()) {
+		for (int i = 5; i < 15; i++) {
+			posB = player2->_bulletPos[i];  // 1Pの弾の位置
+
+			// AとBの距離を求める
+			const float distance = CollisionDistance(posA, posB);
+			const float radius = CollisionRadius(player2->GetRadius(), player1->GetBulletRadius());
+
+			// 当たったか判定
+			if (distance <= radius) {
+				// 1Pの弾の当たった時の処理
+				player1->OnCollision(player1->GetPower());
+			}
+		}
+	}
+#pragma endregion
+
+	//! 2Pと攻撃アイテムの当たり判定
+#pragma region
+	{
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = item->GetAttackPos();  // アイテムの位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(item->GetRadius(), player2->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの当たった時の処理
+			player2->OnCollisionAttack();
+			// アイテムの当たった時の処理
+			item->AttackCollision();
+		}
+	}
+#pragma endregion
+
+	//! 2Pと速度アップアイテムの当たり判定
+#pragma region
+	{
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = item->GetSpeedPos();  // アイテムの位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(item->GetRadius(), player2->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの当たった時の処理
+			player2->OnCollisionSpeed();
+			// アイテムの当たった時の処理
+			item->SpeedCollision();
+		}
+	}
+#pragma endregion
+
+	//! 2Pと最大HPアップアイテムの当たり判定
+#pragma region
+	{
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = item->GetMaxHpPos();  // アイテムの位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(item->GetRadius(), player1->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの当たった時の処理
+			player2->OnCollisionMaxHp();
+			// アイテムの当たった時の処理
+			item->MaxHpCollision();
+		}
+	}
+#pragma endregion
+
+	//! 2Pと回復アイテムの当たり判定
+#pragma region
+	{
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = item->GetHealPos();  // アイテムの位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(item->GetRadius(), player1->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの当たった時の処理
+			player2->OnCollisionHeal();
+			// アイテムの当たった時の処理
+			item->HealCollision();
+		}
+	}
+#pragma endregion
+
+	//! 2Pと弾強化アイテムの当たり判定
+#pragma region
+	{
+		posA = player2->GetPosition(); // 2Pの位置
+		posB = item->GetStrongPos();  // アイテムの位置
+
+		// AとBの距離を求める
+		const float distance = CollisionDistance(posA, posB);
+		const float radius = CollisionRadius(item->GetRadius(), player1->GetBulletRadius());
+
+		// 当たったか判定
+		if (distance <= radius) {
+			// 2Pの当たった時の処理
+			player2->OnCollisionStrong();
 			// アイテムの当たった時の処理
 			item->StrongCollision();
 		}
