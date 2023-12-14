@@ -174,6 +174,8 @@ private:
 	bool _bulletCoolSub;      // 弾のクールタイム低下フラグ
 	bool _addBullet;            // 弾増加フラグ
 	int32_t _bulletLv;
+	int32_t _bulletTimer;
+	bool _isBulletUp;
 
 	//! UI
 	// アイコン

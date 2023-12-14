@@ -44,6 +44,8 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_bulletRad = 10;
 	_addBullet = false;
 	_bulletLv = 1;
+	_bulletTimer = 1800;
+	_isBulletUp = false;
 
 	//! UI
 	// スプライト
@@ -111,6 +113,33 @@ void Player::Update(char* keys)
 		if (_speedTimer <= 0) {
 			_speed = Vector2(8, 8);
 			_isSpeedUp = false;
+		}
+	}
+	// 弾アップ
+	if (_isBulletUp) {
+		_bulletTimer--;
+		if (_direction == Direction::RIGHT) {
+			for (int i = 0; i < 15; i++) {
+				if (!_bulletMove[i])  if (!_bulletSpeedUp)_bulletSpeed[i].x = 13;
+			}
+		}
+		if (_direction == Direction::LEFT) {
+			for (int i = 0; i < 15; i++) {
+				if (!_bulletMove[i])  if (!_bulletSpeedUp)_bulletSpeed[i].x = -13;
+			}
+		}
+		if (_bulletTimer <= 0) {
+			if (_direction == Direction::RIGHT) {
+				for (int i = 0; i < 15; i++) {
+					if (!_bulletMove[i])  if (!_bulletSpeedUp)_bulletSpeed[i].x = 10;
+				}
+			}
+			if (_direction == Direction::LEFT) {
+				for (int i = 0; i < 15; i++) {
+					if (!_bulletMove[i])  if (!_bulletSpeedUp)_bulletSpeed[i].x = -10;
+				}
+			}
+			_isBulletUp = false;
 		}
 	}
 
@@ -279,7 +308,7 @@ void Player::OnCollisionHeal()
 
 void Player::OnCollisionStrong()
 {
-	if (_bulletLv <= 2) _bulletLv++;
+	if (_bulletLv <= 3) _bulletLv++;
 	//! 弾速アップ
 	if (!_bulletSpeedUp) {
 		for (int i = 0; i < 15; i++) {
@@ -294,6 +323,10 @@ void Player::OnCollisionStrong()
 	}
 	//! 弾数増加
 	else if (_bulletCoolSub && !_addBullet) { _addBullet = true; }
+	else if (_addBullet && _bulletCoolSub && _bulletSpeedUp) {
+		_bulletTimer = 1800;
+		_isBulletUp = true;
+	}
 }
 
 void Player::PlayerCollision()
@@ -338,8 +371,6 @@ void Player::Draw()
 	//Novice::ScreenPrintf(0, 60, "bullet[0]:%f", _bulletPos[0].x);
 	//Novice::ScreenPrintf(0, 80, "bullet[1]:%f", _bulletPos[1].x);
 	//Novice::ScreenPrintf(0, 80, "bulletspeed[3]:%f,%f", _bulletSpeed[2].x,_bulletSpeed[2].y);
-	/*Novice::ScreenPrintf(0, 60, "num:%d", _attackNumber[0]);
-	Novice::ScreenPrintf(0, 80, "num:%d", _attackNumber[1]);*/
 #endif
 }
 
@@ -365,7 +396,7 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection, Vector2 attac
 		else Novice::DrawSprite(int(attackNumPos.x), int(attackNumPos.y), _max, 1, 1, 0.0f, WHITE);
 		if (_speedCount <= 29) Novice::DrawSprite(int(speedNumPos.x) + _width * i, int(speedNumPos.y), _num[_speedNumber[i]], 1, 1, 0.0f, WHITE);
 		else Novice::DrawSprite(int(speedNumPos.x), int(speedNumPos.y), _max, 1, 1, 0.0f, WHITE);
-		if (_bulletLv <= 2) Novice::DrawSprite(int(bulletNumPos.x) + _width * i, int(bulletNumPos.y), _num[_bulletNumber[i]], 1, 1, 0.0f, WHITE);
+		if (_bulletLv <= 3) Novice::DrawSprite(int(bulletNumPos.x) + _width * i, int(bulletNumPos.y), _num[_bulletNumber[i]], 1, 1, 0.0f, WHITE);
 		else Novice::DrawSprite(int(bulletNumPos.x), int(bulletNumPos.y), _max, 1, 1, 0.0f, WHITE);
 	}
 }
