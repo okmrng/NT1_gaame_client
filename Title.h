@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Novice.h>
+#include <Background.h>
 
 /// <summary>
 /// タイトルクラス
@@ -30,5 +31,11 @@ public:
 
 private:
 	bool _isNext; // シーン遷移フラグ
+
+	//! 背景
+	Background* _background = nullptr;
+
+	uint32_t _title = 0u;
+	uint32_t _space = 0u;
 };
 

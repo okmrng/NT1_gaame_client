@@ -3,6 +3,13 @@
 void Title::Initialize()
 {
 	_isNext = false;
+
+	//! 背景
+	_background = new Background();
+	_background->Initialize();
+
+	_title = Novice::LoadTexture("./Resouces/Images/title.png");
+	_space = Novice::LoadTexture("./Resouces/Images/spaceT.png");
 }
 
 void Title::Update(char* keys, char* preKeys)
@@ -10,9 +17,16 @@ void Title::Update(char* keys, char* preKeys)
 	if (keys[DIK_SPACE] && preKeys[DIK_SPACE] == 0) {
 		_isNext = true;
 	}
+
+	//! 背景
+	_background->Update();
 }
 
 void Title::Draw()
 {
-	Novice::DrawBox(0, 0, 1280, 720, 0.0f, GREEN, kFillModeSolid);
+	//! 背景
+	_background->Draw();
+
+	Novice::DrawSprite(126, 150, _title, 1, 1, 0.0f, WHITE);
+	Novice::DrawSprite(404, 400, _space, 1, 1, 0.0f, WHITE);
 }

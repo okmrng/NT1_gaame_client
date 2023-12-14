@@ -65,7 +65,7 @@
       <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
     <ClCompile Include="Tutorial.cpp">
-      <Filter>KamataEngine</Filter>
+      <Filter>KamataEngine\ソース</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +158,8 @@
     <ClInclude Include="Background.h">
       <Filter>KamataEngine\ヘッダー</Filter>
     </ClInclude>
-    <ClInclude Include="Tutorial.h" />
+    <ClInclude Include="Tutorial.h">
+      <Filter>KamataEngine\ヘッダー</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
