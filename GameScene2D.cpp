@@ -277,8 +277,9 @@ void GameScene2D::Draw()
 	Novice::DrawBox(0, 640, 1280, 80, 0.0f, BLACK, kFillModeSolid);
 
 	//! UI
-	player1->DrawUI(Vector2(20, 20), 1);     //1P
-	player2->DrawUI(Vector2(1260, 660), -1); //2P
+	player1->DrawUI(Vector2(20, 20), 1, Vector2(523, 45), Vector2(851, 45), Vector2(1100, 45), Vector2(326, 20), Vector2(575, 20), Vector2(690, 20), Vector2(913, 20));  //1P
+	player2->DrawUI(Vector2(1260, 660), -1, Vector2(345, 685), Vector2(673, 685), Vector2(922, 685), Vector2(148, 660), Vector2(407, 660), Vector2(522, 660),
+		Vector2(745, 660));  //2P
 
 	//!  アイテム
 	item->Draw();

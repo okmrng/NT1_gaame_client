@@ -39,11 +39,6 @@ public:
 	void Move(char* keys);
 
 	/// <summary>
-	/// 弾の生成
-	/// </summary>
-	void Attack();
-
-	/// <summary>
 	/// 弾の更新
 	/// </summary>
 	void BulletUpdate();
@@ -52,6 +47,11 @@ public:
 	/// 死亡
 	/// </summary>
 	void Dead();
+
+	/// <summary>
+	/// UIの更新処理
+	/// </summary>
+	void UIUpdate();
 
 	/// <summary>
 	/// 弾が当たった時の関数
@@ -99,7 +99,11 @@ public:
 	/// </summary>
 	/// <param name="hpGagePos">HPゲージの位置</param>
 	/// <param name="hpGageSubDirection">HPゲージを減らしていく方向</param>
-	void DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection);
+	/// <param name="attackNumPos">攻撃LVの値の位置</param>
+	/// <param name="speedNumPos">速度LVの値の位置</param>
+	/// <param name="bulletNumPos">弾LVの値の位置</param>
+	void DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection, Vector2 attackNumPos, Vector2 speedNumPos, Vector2 bulletNumPos,
+		Vector2 attackPos, Vector2 hpNumPos, Vector2 speedPos, Vector2 bulletPos);
 
 	// ゲッター
 	Vector2 GetPosition() { return _pos; }
@@ -169,11 +173,20 @@ private:
 	bool _bulletSpeedUp;     // 弾速度アップフラグ
 	bool _bulletCoolSub;      // 弾のクールタイム低下フラグ
 	bool _addBullet;            // 弾増加フラグ
+	int32_t _bulletLv;
 
 	//! UI
+	// アイコン
 	uint32_t _attackUI;
 	uint32_t _hpUI;
 	uint32_t _speedUI;
 	uint32_t _bulletUI;
+	uint32_t _num[10];
+	// 割り当てる数
+	int32_t _attackNumber[2];
+	int32_t _speedNumber[2];
+	int32_t _bulletNumber[2];
+	// 桁幅
+	int32_t _width;
 };
 
