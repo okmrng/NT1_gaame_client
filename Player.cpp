@@ -18,7 +18,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_isDead = false;
 	_isHit = false;
 	_hitTime = 120;
-	_canPlay = true;
+	_canPlay = false;
 	_attackCount = 1;
 	_speedCount = 1;
 	_attackTimer = 1800;
@@ -61,6 +61,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_num[7] = Novice::LoadTexture("./Resouces/Images/7.png");
 	_num[8] = Novice::LoadTexture("./Resouces/Images/8.png");
 	_num[9] = Novice::LoadTexture("./Resouces/Images/9.png");
+	_max = Novice::LoadTexture("./Resouces/Images/max.png");
 	//  割り当てる数
 	_attackNumber[0] = 0;
 	_attackNumber[1] = 0;
@@ -243,9 +244,11 @@ void Player::OnCollision(float damage)
 
 void Player::OnCollisionAttack()
 {
-	_attackCount++;
-	if (_attackCount <= 31) _power += 2;
-	if (_attackCount > 31) {
+	if (_attackCount <= 29) {
+		_power += 2;
+		_attackCount++;
+	}
+	if (_attackCount > 29) {
 		_attackTimer = 1800;
 		_isAttackUp = true;
 	}
@@ -253,9 +256,11 @@ void Player::OnCollisionAttack()
 
 void Player::OnCollisionSpeed()
 {
-	_speedCount++;
-	if (_speedCount <= 31) _speed += Vector2(0.1f, 0.1f);
-	if (_speedCount > 31) {
+	if (_speedCount <= 29) {
+		_speed += Vector2(0.1f, 0.1f);
+		_speedCount++;
+	}
+	if (_speedCount > 29) {
 		_speedTimer = 1800;
 		_isSpeedUp = true;
 	}
@@ -274,7 +279,7 @@ void Player::OnCollisionHeal()
 
 void Player::OnCollisionStrong()
 {
-	_bulletLv++;
+	if (_bulletLv <= 2) _bulletLv++;
 	//! 弾速アップ
 	if (!_bulletSpeedUp) {
 		for (int i = 0; i < 15; i++) {
@@ -356,9 +361,12 @@ void Player::DrawUI(Vector2 hpGagePos, int32_t hpGageSubDirection, Vector2 attac
 
 	//! レベル
 	for (int i = 0; i < 2; i++) {
-		Novice::DrawSprite(int(attackNumPos.x) + _width * i, int(attackNumPos.y), _num[_attackNumber[i]], 1, 1, 0.0f, WHITE);
-		Novice::DrawSprite(int(speedNumPos.x) + _width * i, int(speedNumPos.y), _num[_speedNumber[i]], 1, 1, 0.0f, WHITE);
-		Novice::DrawSprite(int(bulletNumPos.x) + _width * i, int(bulletNumPos.y), _num[_bulletNumber[i]], 1, 1, 0.0f, WHITE);
+		if (_attackCount <= 29) Novice::DrawSprite(int(attackNumPos.x) + _width * i, int(attackNumPos.y), _num[_attackNumber[i]], 1, 1, 0.0f, WHITE);
+		else Novice::DrawSprite(int(attackNumPos.x), int(attackNumPos.y), _max, 1, 1, 0.0f, WHITE);
+		if (_speedCount <= 29) Novice::DrawSprite(int(speedNumPos.x) + _width * i, int(speedNumPos.y), _num[_speedNumber[i]], 1, 1, 0.0f, WHITE);
+		else Novice::DrawSprite(int(speedNumPos.x), int(speedNumPos.y), _max, 1, 1, 0.0f, WHITE);
+		if (_bulletLv <= 2) Novice::DrawSprite(int(bulletNumPos.x) + _width * i, int(bulletNumPos.y), _num[_bulletNumber[i]], 1, 1, 0.0f, WHITE);
+		else Novice::DrawSprite(int(bulletNumPos.x), int(bulletNumPos.y), _max, 1, 1, 0.0f, WHITE);
 	}
 }
 

@@ -182,6 +182,7 @@ private:
 	uint32_t _speedUI;
 	uint32_t _bulletUI;
 	uint32_t _num[10];
+	uint32_t _max;
 	// 割り当てる数
 	int32_t _attackNumber[2];
 	int32_t _speedNumber[2];
