@@ -40,6 +40,8 @@ void GameScene2D::Initialize()
 	_player2Sprite = Novice::LoadTexture("./Resouces/Images/player2.png");
 	_bullet1Sprite = Novice::LoadTexture("./Resouces/Images/bullet1.png");
 	_bullet2Sprite = Novice::LoadTexture("./Resouces/Images/bullet2.png");
+	_win = Novice::LoadTexture("./Resouces/Images/win.png");
+	_lose = Novice::LoadTexture("./Resouces/Images/lose.png");
 
 	//! 背景
 	_background = new Background();
@@ -275,6 +277,10 @@ void GameScene2D::Draw()
 	//! フレーム
 	Novice::DrawBox(0, 0, 1280, 80, 0.0f, BLACK, kFillModeSolid);
 	Novice::DrawBox(0, 640, 1280, 80, 0.0f, BLACK, kFillModeSolid);
+
+	//! 勝ち負け
+	if (player1->GetIsDead()) Novice::DrawSprite(455, 255, _win, 1, 1, 0.0f, WHITE);
+	if (player2->GetIsDead()) Novice::DrawSprite(395, 255, _lose, 1, 1, 0.0f, WHITE);
 
 	//! UI
 	player1->DrawUI(Vector2(20, 20), 1, Vector2(523, 45), Vector2(851, 45), Vector2(1100, 45), Vector2(326, 20), Vector2(575, 20), Vector2(690, 20), Vector2(913, 20));  //1P

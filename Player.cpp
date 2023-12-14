@@ -338,8 +338,8 @@ void Player::Draw()
 	//Novice::ScreenPrintf(0, 60, "bullet[0]:%f", _bulletPos[0].x);
 	//Novice::ScreenPrintf(0, 80, "bullet[1]:%f", _bulletPos[1].x);
 	//Novice::ScreenPrintf(0, 80, "bulletspeed[3]:%f,%f", _bulletSpeed[2].x,_bulletSpeed[2].y);
-	Novice::ScreenPrintf(0, 60, "num:%d", _attackNumber[0]);
-	Novice::ScreenPrintf(0, 80, "num:%d", _attackNumber[1]);
+	/*Novice::ScreenPrintf(0, 60, "num:%d", _attackNumber[0]);
+	Novice::ScreenPrintf(0, 80, "num:%d", _attackNumber[1]);*/
 #endif
 }
 

@@ -47,6 +47,8 @@ private:
 	uint32_t _player2Sprite = 0u; // 2P本体
 	uint32_t _bullet1Sprite = 0u; // 1P弾
 	uint32_t _bullet2Sprite = 0u; // 2P弾
+	uint32_t _win = 0u;             // 勝ち
+	uint32_t _lose = 0u;            // 負け
 
 	//! 背景
 	Background* _background = nullptr;
