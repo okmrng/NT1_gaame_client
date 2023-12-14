@@ -25,6 +25,7 @@ void Player::Initialize(Vector2 pos, float rad, float hp, float hpMax, float pow
 	_speedTimer = 1800;
 	_isAttackUp = false;
 	_isSpeedUp = false;
+	_isDraw = true;
 
 	//! 弾
 	for (int i = 0; i < 15; i++) {
@@ -84,6 +85,8 @@ void Player::Update(char* keys)
 	// 無敵時間
 	if (_isHit) {
 		_hitTime--;
+		if (_isDraw) _isDraw = false;
+		else _isDraw = true;
 		if (_hitTime <= 0) _isHit = false;
 	}
 
@@ -356,8 +359,10 @@ void Player::Draw()
 	}
 
 	//! 自機
-	if (_direction == Direction::RIGHT) Novice::DrawSprite(int(_pos.x + 20), int(_pos.y - 15), _sprite, 1, 1, 1.6f, WHITE);
-	if (_direction == Direction::LEFT) Novice::DrawSprite(int(_pos.x - 20), int(_pos.y + 15), _sprite, 1, 1, -1.6f, WHITE);
+	if (_isDraw) {
+		if (_direction == Direction::RIGHT) Novice::DrawSprite(int(_pos.x + 20), int(_pos.y - 15), _sprite, 1, 1, 1.6f, WHITE);
+		if (_direction == Direction::LEFT) Novice::DrawSprite(int(_pos.x - 20), int(_pos.y + 15), _sprite, 1, 1, -1.6f, WHITE);
+	}
 #ifdef _DEBUG
 	Novice::DrawEllipse(int(_pos.x), int(_pos.y), int(_rad), int(_rad), 0.0f, BLUE, kFillModeWireFrame);
 #endif

@@ -409,6 +409,7 @@ void GameScene2D::Draw()
 	//!  アイテム
 	item->Draw();
 }
+
 // 通信スレッド関数
 DWORD WINAPI Threadfunc(void*) {
 	// ソケットをオープン

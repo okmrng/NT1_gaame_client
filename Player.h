@@ -164,6 +164,7 @@ private:
 	int32_t _speedTimer; // 速度アップアイテム時間
 	bool _isAttackUp;      // 攻撃アップフラグ
 	bool _isSpeedUp;      // 速度アップフラグ
+	bool _isDraw;
 
 	//! 弾
 	Vector2 _bulletSpeed[15]; // 弾速
